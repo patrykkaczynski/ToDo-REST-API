@@ -1,0 +1,46 @@
+@address= http://localhost:5056
+@toDoTaskId = ce5918fb-a67c-4f8d-a241-8e1524bec03d
+@pageNumber = 4
+@pageSize = 5
+
+###
+GET {{address}}/to-do-tasks/{{toDoTaskId}}
+
+###
+GET {{address}}/to-do-tasks?pageNumber={{pageNumber}}&pageSize={{pageSize}}
+
+###
+POST {{address}}/to-do-tasks
+Content-Type: application/json
+
+{
+  "expirationDate" : "2025-06-03T02:20:22.000Z",
+  "title": "Title 53",
+  "description": "Description 53",
+  "percentComplete": 20
+}
+
+###
+PUT {{address}}/to-do-tasks/{{toDoTaskId}}
+Content-Type: application/json
+
+{
+  "expirationDate" : "2025-05-10",
+  "title": "Update Title 123",
+  "description": "Updated Description",
+  "percentComplete": 60
+}
+
+###
+PATCH {{address}}/to-do-tasks/{{toDoTaskId}}/percent-complete
+Content-Type: application/json
+
+{
+  "percentComplete": 40
+}
+
+###
+DELETE {{address}}/to-do-tasks/{{toDoTaskId}}
+
+###
+PATCH {{address}}/to-do-tasks/{{toDoTaskId}}/done
