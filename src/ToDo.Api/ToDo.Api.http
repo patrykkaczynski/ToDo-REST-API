@@ -1,5 +1,5 @@
 @address= http://localhost:5056
-@toDoTaskId = ce5918fb-a67c-4f8d-a241-8e1524bec03d
+@toDoTaskId = b7d45e37-f220-4d08-8ad6-12d05e54f052
 @pageNumber = 4
 @pageSize = 5
 
@@ -10,14 +10,16 @@ GET {{address}}/to-do-tasks/{{toDoTaskId}}
 GET {{address}}/to-do-tasks?pageNumber={{pageNumber}}&pageSize={{pageSize}}
 
 ###
+GET {{address}}/to-do-tasks/incoming?incomingFilter=2
+###
 POST {{address}}/to-do-tasks
 Content-Type: application/json
 
 {
-  "expirationDate" : "2025-06-03T02:20:22.000Z",
-  "title": "Title 53",
-  "description": "Description 53",
-  "percentComplete": 20
+  "expirationDate" : "2025-05-13T19:00:00.000Z",
+  "title": "Title Today Tomorrow",
+  "description": "Description Today",
+  "percentComplete": 50
 }
 
 ###

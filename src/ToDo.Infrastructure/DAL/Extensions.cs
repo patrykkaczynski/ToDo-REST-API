@@ -8,6 +8,7 @@ using ToDo.Infrastructure.DAL.Decorators;
 using ToDo.Infrastructure.DAL.Handlers;
 using ToDo.Infrastructure.DAL.Options;
 using ToDo.Infrastructure.DAL.Persistence;
+using ToDo.Infrastructure.DAL.Policies;
 using ToDo.Infrastructure.DAL.Repositories;
 using ToDo.Infrastructure.DAL.UnitOfWork;
 
@@ -36,6 +37,12 @@ internal static class Extensions
         services.TryDecorate(typeof(ICommandHandler<>), typeof(UnitOfWorkCommandHandlerDecorator<>));
         
         var infrastructureAssembly = typeof(GetToDoTaskHandler).Assembly;
+        
+        services.Scan(s => s.FromAssemblies(infrastructureAssembly)
+            .AddClasses(c => c.AssignableTo(typeof(IIncomingFilterPolicy)), false)
+            .AsImplementedInterfaces()
+            .WithScopedLifetime());
+        
         services.Scan(s => s.FromAssemblies(infrastructureAssembly)
             .AddClasses(c => c.AssignableTo(typeof(IQueryHandler<,>)), false)
             .AsImplementedInterfaces()

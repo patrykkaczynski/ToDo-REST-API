@@ -27,11 +27,14 @@ public class ToDoTask
         => new(id, expirationDate, title, description, percentComplete, now);
 
     public void Update(DateAndTime expirationDate, Title title, Description description,
-        PercentComplete percentComplete,  DateAndTime now) 
+        PercentComplete percentComplete, DateAndTime now)
         => SetToDoTask(expirationDate, title, description, percentComplete, now);
 
     public void ChangePercentComplete(PercentComplete percentComplete)
         => PercentComplete = percentComplete;
+
+    public void MarkAsDone()
+        => ChangePercentComplete(100);
 
     private void SetToDoTask(DateAndTime expirationDate, Title title, Description description,
         PercentComplete percentComplete, DateAndTime now)

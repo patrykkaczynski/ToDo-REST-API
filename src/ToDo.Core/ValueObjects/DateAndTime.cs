@@ -9,6 +9,8 @@ public sealed record DateAndTime
     {
         Value = value.ToUniversalTime();
     }
+    
+    public DateAndTime AddDays(int days) => new(Value.AddDays(days));
 
     public static implicit operator DateTimeOffset(DateAndTime dateAndTime) => dateAndTime.Value;
 

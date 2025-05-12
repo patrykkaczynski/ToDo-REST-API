@@ -19,7 +19,7 @@ internal sealed class MarkToDoTaskAsDoneHandler : ICommandHandler<MarkToDoTaskAs
             throw new ToDoTaskNotFoundException(command.ToDoTaskId);
         }
 
-        toDoTask.ChangePercentComplete(100);
+        toDoTask.MarkAsDone();
         await _repository.UpdateAsync(toDoTask);
     }
 }

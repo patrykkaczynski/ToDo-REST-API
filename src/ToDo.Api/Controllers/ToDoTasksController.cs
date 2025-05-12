@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ToDo.Application.Abstractions;
 using ToDo.Application.Commands;
 using ToDo.Application.DTO;
+using ToDo.Application.Enums;
 using ToDo.Application.Queries;
 
 namespace ToDo.Api.Controllers;
@@ -12,6 +13,7 @@ public class ToDoTasksController : ControllerBase
 {
     private readonly IQueryHandler<GetToDoTask, ToDoTaskDto> _getToDoTaskHandler;
     private readonly IQueryHandler<GetToDoTasks, IEnumerable<ToDoTaskDto>> _getToDoTasksHandler;
+    private readonly IQueryHandler<GetIncomingToDoTasks, IEnumerable<ToDoTaskDto>> _getIncomingToDoTasksHandler;
     private readonly ICommandHandler<CreateToDoTask> _createToDoTaskHandler;
     private readonly ICommandHandler<UpdateToDoTask> _updateToDoTaskHandler;
     private readonly ICommandHandler<SetToDoTaskPercentComplete> _setToDoTaskPercentCompleteHandler;
@@ -20,6 +22,7 @@ public class ToDoTasksController : ControllerBase
 
     public ToDoTasksController(IQueryHandler<GetToDoTask, ToDoTaskDto> getToDoTaskHandler,
         IQueryHandler<GetToDoTasks, IEnumerable<ToDoTaskDto>> getToDoTasksHandler,
+        IQueryHandler<GetIncomingToDoTasks, IEnumerable<ToDoTaskDto>> getIncomingToDoTasksHandler,
         ICommandHandler<CreateToDoTask> createToDoTaskHandler,
         ICommandHandler<UpdateToDoTask> updateToDoTaskHandler,
         ICommandHandler<SetToDoTaskPercentComplete> setToDoTaskPercentCompleteHandler,
@@ -28,6 +31,7 @@ public class ToDoTasksController : ControllerBase
     {
         _getToDoTaskHandler = getToDoTaskHandler;
         _getToDoTasksHandler = getToDoTasksHandler;
+        _getIncomingToDoTasksHandler = getIncomingToDoTasksHandler;
         _createToDoTaskHandler = createToDoTaskHandler;
         _updateToDoTaskHandler = updateToDoTaskHandler;
         _setToDoTaskPercentCompleteHandler = setToDoTaskPercentCompleteHandler;
@@ -49,6 +53,15 @@ public class ToDoTasksController : ControllerBase
         var toDoTask = await _getToDoTaskHandler.HandleAsync(new GetToDoTask(ToDoTaskId: toDoTaskId));
 
         return Ok(toDoTask);
+    }
+
+    [HttpGet("incoming")]
+    public async Task<ActionResult<IEnumerable<ToDoTaskDto>>> Get([FromQuery] IncomingFilter incomingFilter)
+    {
+        var toDoTasks = await _getIncomingToDoTasksHandler
+            .HandleAsync(new GetIncomingToDoTasks(incomingFilter));
+
+        return Ok(toDoTasks);
     }
 
     [HttpPost]
