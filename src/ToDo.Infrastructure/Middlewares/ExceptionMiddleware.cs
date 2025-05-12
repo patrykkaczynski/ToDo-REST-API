@@ -27,7 +27,7 @@ internal sealed class ExceptionMiddleware : IMiddleware
                     exception.Message)),
             _ => (StatusCodes.Status500InternalServerError, new Response("error", "There was an error."))
         };
-        
+
         context.Response.StatusCode = statusCode;
         await context.Response.WriteAsJsonAsync(response);
     }

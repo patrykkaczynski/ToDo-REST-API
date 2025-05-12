@@ -2,7 +2,7 @@ using Humanizer;
 using Microsoft.AspNetCore.Http;
 using ToDo.Core.Exceptions;
 
-namespace ToDo.Infrastructure.Middlewares;
+namespace ToDo.Infrastructure.DAL.Middlewares;
 
 internal sealed class ExceptionMiddleware : IMiddleware
 {
