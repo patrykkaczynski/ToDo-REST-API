@@ -109,6 +109,21 @@ public class ToDoTaskTests
         // Assert
         toDoTask.PercentComplete.ShouldBe(percentComplete);
     }
+
+    [Fact]
+    public void Marking_ToDoTask_As_Done_Should_Succeed()
+    {
+        // Arrange
+        var percentComplete = new PercentComplete(100);
+        var toDoTask = ToDoTask.Create(Guid.NewGuid(),  new DateAndTime(Now.AddDays(1)),"Title", 
+            "Description", new PercentComplete(50),   new DateAndTime(Now)); 
+        
+        // Act
+        toDoTask.ChangePercentComplete(100);
+
+        // Assert
+        toDoTask.PercentComplete.ShouldBe(percentComplete);
+    }
     
     #region ARRANGE
 
