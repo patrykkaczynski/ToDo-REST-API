@@ -8,7 +8,7 @@ namespace ToDo.Core.Unit.Tests.Entities;
 public class ToDoTaskTests
 {
     [Theory]
-    [MemberData(nameof(IncorrectExpirationDates))]
+    [MemberData(nameof(InvalidExpirationDates))]
     public void Creating_ToDoTask_With_ExpirationDate_In_The_Past_Or_Now_Should_Throw_InvalidExpirationDateException(
         DateTime expiredAt)
     {
@@ -26,8 +26,8 @@ public class ToDoTaskTests
     }
 
     [Theory]
-    [MemberData(nameof(CorrectExpirationDates))]
-    public void Creating_ToDoTask_With_Correct_ExpirationDate_Should_Succeed(DateTime expiredAt)
+    [MemberData(nameof(ValidExpirationDates))]
+    public void Creating_ToDoTask_With_Valid_ExpirationDate_Should_Succeed(DateTime expiredAt)
     {
         // Arrange
         var toDoTaskId = new ToDoTaskId(Guid.NewGuid());
@@ -51,7 +51,7 @@ public class ToDoTaskTests
     }
 
     [Theory]
-    [MemberData(nameof(IncorrectExpirationDates))]
+    [MemberData(nameof(InvalidExpirationDates))]
     public void Updating_ToDoTask_With_ExpirationDate_In_The_Past_Or_Now_Should_Throw_InvalidExpirationDateException(
         DateTime expiredAt)
     {
@@ -71,8 +71,8 @@ public class ToDoTaskTests
     }
 
     [Theory]
-    [MemberData(nameof(CorrectExpirationDates))]
-    public void Updating_ToDoTask_With_Correct_ExpirationDate_Should_Succeed(DateTime expiredAt)
+    [MemberData(nameof(ValidExpirationDates))]
+    public void Updating_ToDoTask_With_Valid_ExpirationDate_Should_Succeed(DateTime expiredAt)
     {
         // Arrange
         var expirationDate = new DateAndTime(expiredAt.AddDays(1));
@@ -129,7 +129,7 @@ public class ToDoTaskTests
 
     private static readonly DateTime Now = new DateTime(2025, 04, 28);
 
-    public static IEnumerable<object[]> IncorrectExpirationDates =>
+    public static IEnumerable<object[]> InvalidExpirationDates =>
         new List<object[]>
         {
             new object[] { Now },
@@ -138,7 +138,7 @@ public class ToDoTaskTests
             new object[] { Now.AddSeconds(-1) },
         };
 
-    public static IEnumerable<object[]> CorrectExpirationDates =>
+    public static IEnumerable<object[]> ValidExpirationDates =>
         new List<object[]>
         {
             new object[] { Now.AddDays(1) },

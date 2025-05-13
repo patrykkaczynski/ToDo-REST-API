@@ -36,7 +36,7 @@ public class TitleTests
     [Theory]
     [InlineData("abc")]
     [InlineData("This is a description with exactly fifty chars.")]
-    public void Creating_Correct_Title_Should_Succeed(string title)
+    public void Creating_Valid_Title_Should_Succeed(string title)
     {
         // Act
         var result = new Title(title);

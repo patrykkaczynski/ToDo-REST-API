@@ -24,7 +24,7 @@ public class PercentCompleteTests
     [InlineData(0)]
     [InlineData(50)]
     [InlineData(100)]
-    public void Creating_Correct_PercentComplete_Should_Succeed(int percentComplete)
+    public void Creating_Valid_PercentComplete_Should_Succeed(int percentComplete)
     {
         // Act
         var result = new PercentComplete(percentComplete);

@@ -14,4 +14,8 @@
       <PackageReference Include="Scrutor" Version="6.0.1" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="ToDo.Application.Unit.Tests" />
+    </ItemGroup>
+
 </Project>

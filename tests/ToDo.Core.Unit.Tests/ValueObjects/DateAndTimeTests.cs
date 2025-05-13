@@ -6,7 +6,7 @@ namespace ToDo.Core.Unit.Tests.ValueObjects;
 public class DateAndTimeTests
 {
     [Fact]
-    public void Creating_Correct_ExpirationDate_Should_Succeed()
+    public void Creating_Valid_ExpirationDate_Should_Succeed()
     {
         // Arrange
         var dateAndTime = DateTime.UtcNow.AddDays(6);

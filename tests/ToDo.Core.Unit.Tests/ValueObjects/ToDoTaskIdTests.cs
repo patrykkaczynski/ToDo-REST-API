@@ -21,7 +21,7 @@ public class ToDoTaskIdTests
     }
     
     [Fact]
-    public void Creating_Correct_ToDoTaskId_Should_Succeed()
+    public void Creating_Valid_ToDoTaskId_Should_Succeed()
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();

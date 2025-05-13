@@ -35,7 +35,7 @@ public class DescriptionTests
     }
 
     [Fact]
-    public void Creating_Correct_Description_Should_Succeed()
+    public void Creating_Valid_Description_Should_Succeed()
     {
         // Arrange
         var description = new string('a', 500);
