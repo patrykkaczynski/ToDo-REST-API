@@ -14,7 +14,6 @@ public class CreateToDoTaskHandlerTests
     public async Task Handling_CreateToDoTask_Command_With_Valid_Data_Should_Create_ToDoTask()
     {
         // Arrange
-
         var command = new CreateToDoTask(Guid.NewGuid(), Now.AddDays(1), "Title",
             "Description", 50);
 
@@ -27,11 +26,9 @@ public class CreateToDoTaskHandlerTests
         var handler = new CreateToDoTaskHandler(toDoTaskRepositoryMock.Object, dateTimeProviderMock.Object);
 
         // Act
-
         await handler.HandleAsync(command);
 
         // Assert
-
         toDoTaskRepositoryMock.Verify(r => r.CreateAsync(It.Is<ToDoTask>(t =>
             t.Id == new ToDoTaskId(command.ToDoTaskId) &&
             t.ExpirationDate == new DateAndTime(command.ExpirationDate) &&

@@ -9,49 +9,50 @@ using ToDo.Core.ValueObjects;
 
 namespace ToDo.Application.Unit.Tests.Commands.Handlers;
 
-public class SetToDoPercentCompleteHandlerTests
+public class MarkToDoTaskAsDoneHandlerTests
 {
     [Fact]
-    public async Task
-        Handling_SetToDoTaskPercentComplete_Command_With_Valid_ToDoTaskId_Should_Update_PercentComplete()
+    public async Task Handling_MarkToDoTaskAsDone_Command_With_Valid_ToDoTaskId_Should_Mark_As_Done()
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();
-        var toDoTask = ToDoTask.Create(toDoTaskId, new DateAndTime(Now.AddDays(2)),
-            "Title", "Description", 80, new DateAndTime(Now));
+        var percentComplete = new PercentComplete(100);
 
-        var command = new SetToDoTaskPercentComplete(toDoTaskId, 50);
+        var toDoTask = ToDoTask.Create(toDoTaskId, new DateAndTime(Now.AddDays(2)),
+            "Title", "Description", 50, new DateAndTime(Now));
+
+        var command = new MarkToDoTaskAsDone(toDoTaskId);
 
         var toDoTaskRepositoryMock = new Mock<IToDoTaskRepository>();
         toDoTaskRepositoryMock.Setup(r => r.GetByIdAsync(toDoTaskId))
             .ReturnsAsync(toDoTask);
 
-        var handler = new SetToDoPercentCompleteHandler(toDoTaskRepositoryMock.Object);
+        var handler = new MarkToDoTaskAsDoneHandler(toDoTaskRepositoryMock.Object);
 
         // Act
         await handler.HandleAsync(command);
 
-        // Assert 
+        // Assert
         toDoTaskRepositoryMock.Verify(r => r.UpdateAsync(It.Is<ToDoTask>(t =>
-                t.Id == new ToDoTaskId(command.ToDoTaskId) &&
-                t.PercentComplete == new PercentComplete(command.PercentComplete)))
-            , Times.Once);
+                t.Id == new ToDoTaskId(toDoTaskId) &&
+                t.PercentComplete == percentComplete)),
+            Times.Once);
     }
 
     [Fact]
     public async Task
-        Handling_SetToDoTaskPercentComplete_Command_With_Nonexistent_ToDoTaskId_Should_Throw_ToDoTaskNotFoundException()
+        Handling_MarkToDoTaskAsDone_Command_With_Nonexistent_ToDoTaskId_Should_Throw_ToDoTaskNotFoundException()
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();
 
-        var command = new SetToDoTaskPercentComplete(toDoTaskId, 50);
+        var command = new MarkToDoTaskAsDone(toDoTaskId);
 
         var toDoTaskRepositoryMock = new Mock<IToDoTaskRepository>();
         toDoTaskRepositoryMock.Setup(r => r.GetByIdAsync(toDoTaskId))
             .ReturnsAsync((ToDoTask)null);
 
-        var handler = new SetToDoPercentCompleteHandler(toDoTaskRepositoryMock.Object);
+        var handler = new MarkToDoTaskAsDoneHandler(toDoTaskRepositoryMock.Object);
 
         // Act
         var exception = await Record.ExceptionAsync(async () => await handler.HandleAsync(command));
