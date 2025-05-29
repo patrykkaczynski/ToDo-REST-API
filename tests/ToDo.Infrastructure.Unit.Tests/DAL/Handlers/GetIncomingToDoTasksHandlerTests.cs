@@ -15,10 +15,9 @@ namespace ToDo.Infrastructure.Unit.Tests.DAL.Handlers;
 public class GetIncomingToDoTasksHandlerTests
 {
     [Fact]
-    public async Task Handling_GetIncomingToDoTasks_Query_With_Existing_Policy_Should_Return_ToDoTasks()
+    public async Task Handling_GetIncomingToDoTasks_Query_With_Existing_Policy_Should_Return_ToDoTaskDtos()
     {
         // Arrange
-
         var query = new GetIncomingToDoTasks(IncomingFilter.Today);
 
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();
@@ -33,11 +32,9 @@ public class GetIncomingToDoTasksHandlerTests
         var handler = new GetIncomingToDoTasksHandler(policies);
 
         // Act
-
         var result = (await handler.HandleAsync(query)).ToList();
 
         // Assert
-
         result.ShouldNotBeEmpty();
         result.Count.ShouldBe(2);
     }
@@ -47,7 +44,6 @@ public class GetIncomingToDoTasksHandlerTests
         Handling_GetIncomingToDoTasks_Query_With_Nonexistent_Policy_Should_Throw_NoIncomingFilterPolicyFoundException()
     {
         // Arrange
-
         var query = new GetIncomingToDoTasks(IncomingFilter.Today);
 
         var policies = new List<IIncomingFilterPolicy>();
@@ -55,11 +51,9 @@ public class GetIncomingToDoTasksHandlerTests
         var handler = new GetIncomingToDoTasksHandler(policies);
 
         // Act
-
         var result = await Record.ExceptionAsync(async () => await handler.HandleAsync(query));
 
         // Assert
-
         result.ShouldNotBeNull();
         result.ShouldBeOfType<NoIncomingFilterPolicyFoundException>();
     }

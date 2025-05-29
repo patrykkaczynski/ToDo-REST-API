@@ -31,7 +31,7 @@ public class CurrentWeekIncomingFilterPolicyTests
     }
 
     [Fact]
-    public async Task GetIncomingToDoTasks_WithCurrentWeekPolicy_Should_Return_Only_Tasks_Within_ThisWeek()
+    public async Task GetIncomingToDoTasks_WithCurrentWeekPolicy_Should_Return_Only_ToDoTaskDtos_Within_ThisWeek()
     {
         // Arrange
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();

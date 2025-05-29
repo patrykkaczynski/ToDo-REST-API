@@ -31,7 +31,7 @@ public class TomorrowIncomingFilterPolicyTests
     }
 
     [Fact]
-    public async Task GetIncomingToDoTasks_WithTodayPolicy_Should_Return_Only_Tasks_Within_ThisWeek()
+    public async Task GetIncomingToDoTasks_WithTomorrowPolicy_Should_Return_Only_ToDoTaskDtos_ForTomorrow()
     {
         // Arrange
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();
