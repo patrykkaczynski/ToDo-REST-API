@@ -18,10 +18,10 @@ internal sealed class GetIncomingToDoTasksHandler :  IQueryHandler<GetIncomingTo
         var policy = _incomingFiltePolicies.SingleOrDefault(p => p.CanBeApplied(query.incomingFilter));
         if (policy is null)
         {
-            throw new NoIncomingFilterPolicyFound(query.incomingFilter);
+            throw new NoIncomingFilterPolicyFoundException(query.incomingFilter);
         }
 
-        var toDoTasks = await policy.GetIncomingToDoTasks();
+        var toDoTasks = await policy.GetIncomingToDoTasksAsync();
         return toDoTasks;
     }
 }

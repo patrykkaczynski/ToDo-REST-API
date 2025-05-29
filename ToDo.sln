@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Core.Unit.Tests", "tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Application.Unit.Tests", "tests\ToDo.Application.Unit.Tests\ToDo.Application.Unit.Tests.csproj", "{382D7CDB-3BDB-4039-97A5-F6E2EC55E412}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Infrastructure.Unit.Tests", "tests\ToDo.Infrastructure.Unit.Tests\ToDo.Infrastructure.Unit.Tests.csproj", "{E2AA4671-7535-4038-BFD2-C0F11F98033D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,18 @@ Global
 		{382D7CDB-3BDB-4039-97A5-F6E2EC55E412}.Release|x64.Build.0 = Release|Any CPU
 		{382D7CDB-3BDB-4039-97A5-F6E2EC55E412}.Release|x86.ActiveCfg = Release|Any CPU
 		{382D7CDB-3BDB-4039-97A5-F6E2EC55E412}.Release|x86.Build.0 = Release|Any CPU
+		{E2AA4671-7535-4038-BFD2-C0F11F98033D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2AA4671-7535-4038-BFD2-C0F11F98033D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2AA4671-7535-4038-BFD2-C0F11F98033D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E2AA4671-7535-4038-BFD2-C0F11F98033D}.Debug|x64.Build.0 = Debug|Any CPU
+		{E2AA4671-7535-4038-BFD2-C0F11F98033D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E2AA4671-7535-4038-BFD2-C0F11F98033D}.Debug|x86.Build.0 = Debug|Any CPU
+		{E2AA4671-7535-4038-BFD2-C0F11F98033D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2AA4671-7535-4038-BFD2-C0F11F98033D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2AA4671-7535-4038-BFD2-C0F11F98033D}.Release|x64.ActiveCfg = Release|Any CPU
+		{E2AA4671-7535-4038-BFD2-C0F11F98033D}.Release|x64.Build.0 = Release|Any CPU
+		{E2AA4671-7535-4038-BFD2-C0F11F98033D}.Release|x86.ActiveCfg = Release|Any CPU
+		{E2AA4671-7535-4038-BFD2-C0F11F98033D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,5 +126,6 @@ Global
 		{480EE2FD-ABC4-40AD-86BB-871C81D3A0FC} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{6BF19C38-3B36-45EE-B1E3-48A02FCAFB27} = {38CB1C5F-979C-4921-BB5E-4D2C7510D0E4}
 		{382D7CDB-3BDB-4039-97A5-F6E2EC55E412} = {38CB1C5F-979C-4921-BB5E-4D2C7510D0E4}
+		{E2AA4671-7535-4038-BFD2-C0F11F98033D} = {38CB1C5F-979C-4921-BB5E-4D2C7510D0E4}
 	EndGlobalSection
 EndGlobal

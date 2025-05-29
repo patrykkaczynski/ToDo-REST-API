@@ -7,5 +7,5 @@ internal interface IIncomingFilterPolicy
 {
     bool CanBeApplied(IncomingFilter  filter);
 
-    Task<IEnumerable<ToDoTaskDto>> GetIncomingToDoTasks();
+    Task<IEnumerable<ToDoTaskDto>> GetIncomingToDoTasksAsync();
 }

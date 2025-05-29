@@ -24,4 +24,8 @@
       <Folder Include="DAL\Migrations\" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="ToDo.Infrastructure.Unit.Tests" />
+    </ItemGroup>
+
 </Project>

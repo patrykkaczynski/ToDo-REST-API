@@ -6,6 +6,7 @@ namespace ToDo.Infrastructure.DAL.Persistence;
 internal sealed class ToDoDbContext : DbContext
 {
     public DbSet<ToDoTask> ToDoTasks { get; set; }
+    
     public ToDoDbContext(DbContextOptions<ToDoDbContext> options) 
         : base(options)
     {
