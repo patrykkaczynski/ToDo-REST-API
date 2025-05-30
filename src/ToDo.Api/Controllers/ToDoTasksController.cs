@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ToDo.Application.Abstractions;
 using ToDo.Application.Commands;
+using ToDo.Application.Common;
 using ToDo.Application.DTO;
 using ToDo.Application.Enums;
 using ToDo.Application.Queries;
@@ -12,7 +13,7 @@ namespace ToDo.Api.Controllers;
 public class ToDoTasksController : ControllerBase
 {
     private readonly IQueryHandler<GetToDoTask, ToDoTaskDto> _getToDoTaskHandler;
-    private readonly IQueryHandler<GetToDoTasks, IEnumerable<ToDoTaskDto>> _getToDoTasksHandler;
+    private readonly IQueryHandler<GetToDoTasks, PagedResult<ToDoTaskDto>> _getToDoTasksHandler;
     private readonly IQueryHandler<GetIncomingToDoTasks, IEnumerable<ToDoTaskDto>> _getIncomingToDoTasksHandler;
     private readonly ICommandHandler<CreateToDoTask> _createToDoTaskHandler;
     private readonly ICommandHandler<UpdateToDoTask> _updateToDoTaskHandler;
@@ -21,7 +22,7 @@ public class ToDoTasksController : ControllerBase
     private readonly ICommandHandler<MarkToDoTaskAsDone> _markToDoTaskAsDoneHandler;
 
     public ToDoTasksController(IQueryHandler<GetToDoTask, ToDoTaskDto> getToDoTaskHandler,
-        IQueryHandler<GetToDoTasks, IEnumerable<ToDoTaskDto>> getToDoTasksHandler,
+        IQueryHandler<GetToDoTasks, PagedResult<ToDoTaskDto>> getToDoTasksHandler,
         IQueryHandler<GetIncomingToDoTasks, IEnumerable<ToDoTaskDto>> getIncomingToDoTasksHandler,
         ICommandHandler<CreateToDoTask> createToDoTaskHandler,
         ICommandHandler<UpdateToDoTask> updateToDoTaskHandler,

@@ -1,6 +1,7 @@
 using ToDo.Application.Abstractions;
+using ToDo.Application.Common;
 using ToDo.Application.DTO;
 
 namespace ToDo.Application.Queries;
 
-public record GetToDoTasks(int PageNumber, int PageSize) : IQuery<IEnumerable<ToDoTaskDto>>;
+public record GetToDoTasks(string SearchPhrase, int PageNumber, int PageSize) : IQuery<PagedResult<ToDoTaskDto>>;
