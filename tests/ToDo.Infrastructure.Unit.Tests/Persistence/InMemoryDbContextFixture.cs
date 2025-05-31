@@ -54,6 +54,12 @@ public class InMemoryDbContextFixture : IAsyncLifetime
                 "Title 11", "Description 11", 25, new DateAndTime(Now)),
             ToDoTask.Create(Guid.Parse("6e96bb1e-3089-4817-9019-7da90af741ca"), new DateAndTime(Now.AddDays(30)),
                 "Title 12", "Description 12", 45, new DateAndTime(Now)),
+            ToDoTask.Create(Guid.Parse("ea5b698e-3c36-40a1-9ed5-c56c80119285"), new DateAndTime(Now.AddDays(50)),
+                "Title 13", "Description 13", 45, new DateAndTime(Now)),
+            ToDoTask.Create(Guid.Parse("2bc34723-bab3-47ae-aa6a-fb1fb1c76d67"), new DateAndTime(Now.AddDays(60)),
+                "Title 14", "Description 14", 45, new DateAndTime(Now)),
+            ToDoTask.Create(Guid.Parse("4a603cd8-0b68-4ea7-90cc-22a2b6c327d4"), new DateAndTime(Now.AddDays(70)),
+                "Title 15", "Description 15", 45, new DateAndTime(Now)),
         };
 
         context.ToDoTasks.AddRange(toDoTasks);

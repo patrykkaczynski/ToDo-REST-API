@@ -43,33 +43,38 @@ internal sealed class GetToDoTasksHandler : IQueryHandler<GetToDoTasks, PagedRes
                 ItemsTo = 0
             };
         }
-        
+
         var totalPages = (int)Math.Ceiling(totalCount * 1.0 / query.PageSize);
         if (query.PageNumber < 1 || query.PageNumber > totalPages)
         {
             throw new InvalidPageNumberException(query.PageNumber, totalPages);
         }
 
-        if (query.SortBy is not null && !PaginationOptions.AllowedSortByColumnNames.Contains(query.SortBy))
+        if (query.SortBy is not null && !PaginationOptions.AllowedSortByColumnNames
+                .Any(x => string.Equals(x, query.SortBy, StringComparison.OrdinalIgnoreCase)))
         {
             throw new InvalidSortByColumnNameException(query.SortBy);
         }
 
         if (query.SortBy is not null)
         {
-            var columnSelector = new Dictionary<string, Expression<Func<ToDoTask, object>>>
-            {
-                { nameof(ToDoTask.ExpirationDate), t => t.ExpirationDate },
-                { nameof(ToDoTask.Title), t => t.Title },
-                { nameof(ToDoTask.Description), t => t.Description },
-                { nameof(ToDoTask.PercentComplete), t => t.PercentComplete },
-            };
+            var columnSelector =
+                new Dictionary<string, LambdaExpression>(StringComparer.OrdinalIgnoreCase)
+                {
+                    {
+                        nameof(ToDoTask.ExpirationDate),
+                        (Expression<Func<ToDoTask, DateTimeOffset>>)(t => t.ExpirationDate)
+                    },
+                    { nameof(ToDoTask.Title), (Expression<Func<ToDoTask, string>>)(t => t.Title) },
+                    { nameof(ToDoTask.Description), (Expression<Func<ToDoTask, string>>)(t => t.Description) },
+                    { nameof(ToDoTask.PercentComplete), (Expression<Func<ToDoTask, int>>)(t => t.PercentComplete) },
+                };
 
             var selectedColumn = columnSelector[query.SortBy];
 
             baseQuery = query.SortDirection is SortDirection.Ascending
-                ? baseQuery.OrderBy(selectedColumn)
-                : baseQuery.OrderByDescending(selectedColumn);
+                ? Queryable.OrderBy(baseQuery, (dynamic)selectedColumn)
+                : Queryable.OrderByDescending(baseQuery, (dynamic)selectedColumn);
         }
 
         var skippedItems = (query.PageNumber - 1) * query.PageSize;

@@ -7,10 +7,10 @@
 GET {{address}}/to-do-tasks/{{toDoTaskId}}
 
 ###
-GET {{address}}/to-do-tasks?searchPhrase=text&pageNumber={{pageNumber}}&pageSize={{pageSize}}
+GET {{address}}/to-do-tasks?searchPhrase=New&pageNumber={{pageNumber}}&pageSize={{pageSize}}
 
 ###
-GET {{address}}/to-do-tasks?searchPhrase=Title&pageNumber={{pageNumber}}&pageSize={{pageSize}}&sortBy=ExpirationDate&sortDirection=Descending
+GET {{address}}/to-do-tasks?searchPhrase=New&pageNumber={{pageNumber}}&pageSize={{pageSize}}&sortBy=ExpirationDate&sortDirection=Descending
 
 ###
 GET {{address}}/to-do-tasks/incoming?incomingFilter=Today
