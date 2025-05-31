@@ -3,7 +3,6 @@ using ToDo.Application.Abstractions;
 using ToDo.Application.Commands;
 using ToDo.Application.Common;
 using ToDo.Application.DTO;
-using ToDo.Application.Enums;
 using ToDo.Application.Queries;
 
 namespace ToDo.Api.Controllers;

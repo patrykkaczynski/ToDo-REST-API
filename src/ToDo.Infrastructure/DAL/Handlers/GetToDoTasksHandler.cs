@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using ToDo.Application.Abstractions;
 using ToDo.Application.Common;
@@ -24,25 +25,59 @@ internal sealed class GetToDoTasksHandler : IQueryHandler<GetToDoTasks, PagedRes
             throw new InvalidPageSizeException(query.PageSize);
         }
 
+        var searchPhrase = query.SearchPhrase?.ToLower();
         var baseQuery = _toDoTasks
-            .Where(x => query.SearchPhrase == null ||
-                        (x.Title.Value.Contains(query.SearchPhrase, StringComparison.OrdinalIgnoreCase) ||
-                         x.Description.Value.Contains(query.SearchPhrase, StringComparison.OrdinalIgnoreCase)));
+            .Where(x => searchPhrase == null ||
+                        ((string)x.Title).ToLower().Contains(searchPhrase) ||
+                        ((string)x.Description).ToLower().Contains(searchPhrase));
 
         var totalCount = await baseQuery.CountAsync();
+        if (totalCount == 0)
+        {
+            return new PagedResult<ToDoTaskDto>
+            {
+                Items = [],
+                TotalItemsCount = 0,
+                TotalPages = 0,
+                ItemsFrom = 0,
+                ItemsTo = 0
+            };
+        }
+        
         var totalPages = (int)Math.Ceiling(totalCount * 1.0 / query.PageSize);
         if (query.PageNumber < 1 || query.PageNumber > totalPages)
         {
             throw new InvalidPageNumberException(query.PageNumber, totalPages);
         }
 
+        if (query.SortBy is not null && !PaginationOptions.AllowedSortByColumnNames.Contains(query.SortBy))
+        {
+            throw new InvalidSortByColumnNameException(query.SortBy);
+        }
+
+        if (query.SortBy is not null)
+        {
+            var columnSelector = new Dictionary<string, Expression<Func<ToDoTask, object>>>
+            {
+                { nameof(ToDoTask.ExpirationDate), t => t.ExpirationDate },
+                { nameof(ToDoTask.Title), t => t.Title },
+                { nameof(ToDoTask.Description), t => t.Description },
+                { nameof(ToDoTask.PercentComplete), t => t.PercentComplete },
+            };
+
+            var selectedColumn = columnSelector[query.SortBy];
+
+            baseQuery = query.SortDirection is SortDirection.Ascending
+                ? baseQuery.OrderBy(selectedColumn)
+                : baseQuery.OrderByDescending(selectedColumn);
+        }
+
         var skippedItems = (query.PageNumber - 1) * query.PageSize;
         var toDoTasks = await baseQuery
             .Skip(skippedItems)
             .Take(query.PageSize)
-            .OrderBy(x => x.ExpirationDate)
             .AsNoTracking()
-            .Select(x => x.AsDto())
+            .Select(t => t.AsDto())
             .ToListAsync();
 
         return new PagedResult<ToDoTaskDto>

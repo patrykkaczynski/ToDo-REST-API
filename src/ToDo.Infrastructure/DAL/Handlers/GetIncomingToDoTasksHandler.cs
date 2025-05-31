@@ -15,10 +15,10 @@ internal sealed class GetIncomingToDoTasksHandler :  IQueryHandler<GetIncomingTo
     
     public async Task<IEnumerable<ToDoTaskDto>> HandleAsync(GetIncomingToDoTasks query)
     {
-        var policy = _incomingFiltePolicies.SingleOrDefault(p => p.CanBeApplied(query.incomingFilter));
+        var policy = _incomingFiltePolicies.SingleOrDefault(p => p.CanBeApplied(query.IncomingFilter));
         if (policy is null)
         {
-            throw new NoIncomingFilterPolicyFoundException(query.incomingFilter);
+            throw new NoIncomingFilterPolicyFoundException(query.IncomingFilter);
         }
 
         var toDoTasks = await policy.GetIncomingToDoTasksAsync();

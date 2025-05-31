@@ -1,4 +1,4 @@
-using ToDo.Application.Enums;
+using ToDo.Application.Common;
 using ToDo.Core.Exceptions;
 
 namespace ToDo.Infrastructure.Exceptions;

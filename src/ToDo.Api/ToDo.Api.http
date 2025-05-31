@@ -1,25 +1,29 @@
 @address= http://localhost:5056
-@toDoTaskId = b7d45e37-f220-4d08-8ad6-12d05e54f052
-@pageNumber = 4
+@toDoTaskId = 355a3bd4-8936-4c28-ac7c-7bf300799d63
+@pageNumber = 1
 @pageSize = 5
 
 ###
 GET {{address}}/to-do-tasks/{{toDoTaskId}}
 
 ###
-GET {{address}}/to-do-tasks?pageNumber={{pageNumber}}&pageSize={{pageSize}}
+GET {{address}}/to-do-tasks?searchPhrase=text&pageNumber={{pageNumber}}&pageSize={{pageSize}}
 
 ###
-GET {{address}}/to-do-tasks/incoming?incomingFilter=2
+GET {{address}}/to-do-tasks?searchPhrase=Title&pageNumber={{pageNumber}}&pageSize={{pageSize}}&sortBy=ExpirationDate&sortDirection=Descending
+
+###
+GET {{address}}/to-do-tasks/incoming?incomingFilter=Today
+
 ###
 POST {{address}}/to-do-tasks
 Content-Type: application/json
 
 {
-  "expirationDate" : "2025-05-13T19:00:00.000Z",
-  "title": "Title Today Tomorrow",
-  "description": "Description Today",
-  "percentComplete": 50
+  "expirationDate" : "2025-05-31T19:00:00.000Z",
+  "title": "Title Today New",
+  "description": "Description Today New",
+  "percentComplete": 33
 }
 
 ###
@@ -27,10 +31,10 @@ PUT {{address}}/to-do-tasks/{{toDoTaskId}}
 Content-Type: application/json
 
 {
-  "expirationDate" : "2025-05-10",
-  "title": "Update Title 123",
+  "expirationDate" : "2025-06-10",
+  "title": "Update Title New",
   "description": "Updated Description",
-  "percentComplete": 60
+  "percentComplete": 70
 }
 
 ###
@@ -38,7 +42,7 @@ PATCH {{address}}/to-do-tasks/{{toDoTaskId}}/percent-complete
 Content-Type: application/json
 
 {
-  "percentComplete": 40
+  "percentComplete": 85
 }
 
 ###

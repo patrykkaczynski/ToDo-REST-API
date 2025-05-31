@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using ToDo.Application.Common;
 using ToDo.Application.DTO;
-using ToDo.Application.Enums;
 using ToDo.Core.Abstractions;
 using ToDo.Core.Entities;
 using ToDo.Core.ValueObjects;
@@ -26,8 +26,9 @@ internal sealed class TomorrowIncomingFilterPolicy : IIncomingFilterPolicy
     public async Task<IEnumerable<ToDoTaskDto>> GetIncomingToDoTasksAsync()
     {
         var now = _dateTimeProvider.Current();
-        var tomorrow = new DateAndTime(now).AddDays(1);
-        var dayAfterTomorrowStart = new DateAndTime(now).AddDays(2);
+        var dateNow = now.Date;
+        var tomorrow = new DateAndTime(dateNow).AddDays(1);
+        var dayAfterTomorrowStart = new DateAndTime(dateNow).AddDays(2);
 
         return await _toDoTasks
             .Where(x => x.ExpirationDate >= tomorrow && x.ExpirationDate < dayAfterTomorrowStart)

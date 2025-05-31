@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using ToDo.Application.Common;
 using ToDo.Application.DTO;
-using ToDo.Application.Enums;
 using ToDo.Core.Abstractions;
 using ToDo.Core.Entities;
 using ToDo.Core.ValueObjects;

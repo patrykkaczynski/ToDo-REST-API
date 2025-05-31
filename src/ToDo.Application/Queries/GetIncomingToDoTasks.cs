@@ -1,7 +1,7 @@
 using ToDo.Application.Abstractions;
+using ToDo.Application.Common;
 using ToDo.Application.DTO;
-using ToDo.Application.Enums;
 
 namespace ToDo.Application.Queries;
 
-public record GetIncomingToDoTasks(IncomingFilter incomingFilter) : IQuery<IEnumerable<ToDoTaskDto>>;
+public record GetIncomingToDoTasks(IncomingFilter IncomingFilter) : IQuery<IEnumerable<ToDoTaskDto>>;
