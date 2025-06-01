@@ -4,21 +4,16 @@ using ToDo.Core.Repositories;
 
 namespace ToDo.Application.Commands.Handlers;
 
-internal sealed class DeleteToDoTaskHandler : ICommandHandler<DeleteToDoTask>
+internal sealed class DeleteToDoTaskHandler(IToDoTaskRepository repository) : ICommandHandler<DeleteToDoTask>
 {
-    private readonly IToDoTaskRepository _repository;
-
-    public DeleteToDoTaskHandler(IToDoTaskRepository repository)
-        => _repository = repository;
-
     public async Task HandleAsync(DeleteToDoTask command)
     {
-        var toDoTask = await _repository.GetByIdAsync(command.ToDoTaskId);
+        var toDoTask = await repository.GetByIdAsync(command.ToDoTaskId);
         if (toDoTask is null)
         {
             throw new ToDoTaskNotFoundException(command.ToDoTaskId);
         }
 
-        await _repository.DeleteAsync(toDoTask);
+        await repository.DeleteAsync(toDoTask);
     }
 }

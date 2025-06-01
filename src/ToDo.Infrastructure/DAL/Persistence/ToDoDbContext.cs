@@ -3,14 +3,9 @@ using ToDo.Core.Entities;
 
 namespace ToDo.Infrastructure.DAL.Persistence;
 
-internal sealed class ToDoDbContext : DbContext
+internal sealed class ToDoDbContext(DbContextOptions<ToDoDbContext> options) : DbContext(options)
 {
     public DbSet<ToDoTask> ToDoTasks { get; set; }
-    
-    public ToDoDbContext(DbContextOptions<ToDoDbContext> options) 
-        : base(options)
-    {
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

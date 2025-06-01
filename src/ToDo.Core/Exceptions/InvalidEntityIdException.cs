@@ -1,10 +1,7 @@
 namespace ToDo.Core.Exceptions;
 
-public sealed class InvalidEntityIdException : CustomException
+public sealed class InvalidEntityIdException(object id)
+    : CustomException($"The value '{id}' is not a valid entity identifier.")
 {
-    public object Id { get; }
-
-    public InvalidEntityIdException(object id)
-        : base($"The value '{id}' is not a valid entity identifier.")
-        => Id = id;
+    public object Id { get; } = id;
 }

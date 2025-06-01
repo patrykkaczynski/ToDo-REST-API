@@ -9,23 +9,17 @@ using ToDo.Infrastructure.DAL.Persistence;
 
 namespace ToDo.Infrastructure.DAL.Policies;
 
-internal sealed class TomorrowIncomingFilterPolicy : IIncomingFilterPolicy
+internal sealed class TomorrowIncomingFilterPolicy(ToDoDbContext dbContext, IDateTimeProvider dateTimeProvider)
+    : IIncomingFilterPolicy
 {
-    private readonly DbSet<ToDoTask> _toDoTasks;
-    private readonly IDateTimeProvider _dateTimeProvider;
-
-    public TomorrowIncomingFilterPolicy(ToDoDbContext dbContext, IDateTimeProvider dateTimeProvider)
-    {
-        _toDoTasks = dbContext.ToDoTasks;
-        _dateTimeProvider = dateTimeProvider;
-    }
+    private readonly DbSet<ToDoTask> _toDoTasks = dbContext.ToDoTasks;
 
     public bool CanBeApplied(IncomingFilter incomingFilter)
         => incomingFilter == IncomingFilter.Tomorrow;
 
     public async Task<IEnumerable<ToDoTaskDto>> GetIncomingToDoTasksAsync()
     {
-        var now = _dateTimeProvider.Current();
+        var now = dateTimeProvider.Current();
         var dateNow = now.Date;
         var tomorrow = new DateAndTime(dateNow).AddDays(1);
         var dayAfterTomorrowStart = new DateAndTime(dateNow).AddDays(2);

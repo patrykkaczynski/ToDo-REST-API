@@ -9,23 +9,17 @@ using ToDo.Infrastructure.DAL.Persistence;
 
 namespace ToDo.Infrastructure.DAL.Policies;
 
-internal sealed class CurrentWeekIncomingFilterPolicy : IIncomingFilterPolicy
+internal sealed class CurrentWeekIncomingFilterPolicy(ToDoDbContext dbContext, IDateTimeProvider dateTimeProvider)
+    : IIncomingFilterPolicy
 {
-    private readonly DbSet<ToDoTask> _toDoTasks;
-    private readonly IDateTimeProvider _dateTimeProvider;
-
-    public CurrentWeekIncomingFilterPolicy(ToDoDbContext dbContext, IDateTimeProvider dateTimeProvider)
-    {
-        _toDoTasks = dbContext.ToDoTasks;
-        _dateTimeProvider = dateTimeProvider;
-    }
+    private readonly DbSet<ToDoTask> _toDoTasks = dbContext.ToDoTasks;
 
     public bool CanBeApplied(IncomingFilter incomingFilter)
         => incomingFilter == IncomingFilter.CurrentWeek;
 
     public async Task<IEnumerable<ToDoTaskDto>> GetIncomingToDoTasksAsync()
     {
-        var now = _dateTimeProvider.Current();
+        var now = dateTimeProvider.Current();
         var dateNow =  now.Date;
         var currentDay = dateNow.DayOfWeek;
         var daysSinceMonday = currentDay is DayOfWeek.Sunday ? 6 : ((int)currentDay - 1);

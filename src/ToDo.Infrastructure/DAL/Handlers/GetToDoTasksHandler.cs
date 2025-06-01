@@ -11,12 +11,10 @@ using ToDo.Infrastructure.Exceptions;
 
 namespace ToDo.Infrastructure.DAL.Handlers;
 
-internal sealed class GetToDoTasksHandler : IQueryHandler<GetToDoTasks, PagedResult<ToDoTaskDto>>
+internal sealed class GetToDoTasksHandler(ToDoDbContext dbContext)
+    : IQueryHandler<GetToDoTasks, PagedResult<ToDoTaskDto>>
 {
-    private readonly DbSet<ToDoTask> _toDoTasks;
-
-    public GetToDoTasksHandler(ToDoDbContext dbContext)
-        => _toDoTasks = dbContext.ToDoTasks;
+    private readonly DbSet<ToDoTask> _toDoTasks = dbContext.ToDoTasks;
 
     public async Task<PagedResult<ToDoTaskDto>> HandleAsync(GetToDoTasks query)
     {

@@ -3,7 +3,7 @@ using ToDo.Core.Entities;
 using ToDo.Core.ValueObjects;
 using ToDo.Infrastructure.DAL.Persistence;
 
-namespace ToDo.Infrastructure.Unit.Tests.Persistence;
+namespace ToDo.Infrastructure.Unit.Tests.DAL.Persistence;
 
 public class InMemoryDbContextFixture : IAsyncLifetime
 {

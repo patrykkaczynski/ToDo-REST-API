@@ -9,12 +9,9 @@ using ToDo.Infrastructure.DAL.Persistence;
 
 namespace ToDo.Infrastructure.DAL.Handlers;
 
-internal sealed class GetToDoTaskHandler : IQueryHandler<GetToDoTask, ToDoTaskDto>
+internal sealed class GetToDoTaskHandler(ToDoDbContext dbContext) : IQueryHandler<GetToDoTask, ToDoTaskDto>
 {
-    private readonly DbSet<ToDoTask> _toDoTasks;
-    
-    public GetToDoTaskHandler(ToDoDbContext dbContext)
-        => _toDoTasks = dbContext.ToDoTasks;
+    private readonly DbSet<ToDoTask> _toDoTasks = dbContext.ToDoTasks;
 
     public async Task<ToDoTaskDto> HandleAsync(GetToDoTask query)
     {

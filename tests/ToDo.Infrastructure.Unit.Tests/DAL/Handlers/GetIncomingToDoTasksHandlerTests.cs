@@ -6,18 +6,14 @@ using ToDo.Core.Abstractions;
 using ToDo.Infrastructure.DAL.Handlers;
 using ToDo.Infrastructure.DAL.Policies;
 using ToDo.Infrastructure.Exceptions;
-using ToDo.Infrastructure.Unit.Tests.Base;
-using ToDo.Infrastructure.Unit.Tests.Persistence;
+using ToDo.Infrastructure.Unit.Tests.DAL.Base;
+using ToDo.Infrastructure.Unit.Tests.DAL.Persistence;
 
 namespace ToDo.Infrastructure.Unit.Tests.DAL.Handlers;
 
 [Collection(nameof(InMemoryDbCollection))]
-public class GetIncomingToDoTasksHandlerTests : TestBase
+public class GetIncomingToDoTasksHandlerTests(InMemoryDbContextFixture fixture) : TestBase(fixture)
 {
-    public GetIncomingToDoTasksHandlerTests(InMemoryDbContextFixture fixture) : base(fixture)
-    {
-    }
-
     [Fact]
     public async Task Handling_GetIncomingToDoTasks_Query_With_Existing_Policy_Should_Return_ToDoTaskDtos()
     {
@@ -26,11 +22,11 @@ public class GetIncomingToDoTasksHandlerTests : TestBase
 
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();
         dateTimeProviderMock.Setup(p => p.Current())
-            .Returns(_now);
+            .Returns(Now);
 
         var policies = new List<IIncomingFilterPolicy>()
         {
-            new TodayIncomingFilterPolicy(_dbContext, dateTimeProviderMock.Object)
+            new TodayIncomingFilterPolicy(DbContext, dateTimeProviderMock.Object)
         };
 
         var handler = new GetIncomingToDoTasksHandler(policies);

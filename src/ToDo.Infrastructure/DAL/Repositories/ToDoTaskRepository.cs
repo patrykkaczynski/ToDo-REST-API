@@ -6,14 +6,9 @@ using ToDo.Infrastructure.DAL.Persistence;
 
 namespace ToDo.Infrastructure.DAL.Repositories;
 
-internal sealed class ToDoTaskRepository : IToDoTaskRepository
+internal sealed class ToDoTaskRepository(ToDoDbContext dbContext) : IToDoTaskRepository
 {
-    private readonly DbSet<ToDoTask> _toDoTasks;
-
-    public ToDoTaskRepository(ToDoDbContext dbContext)
-    {
-        _toDoTasks = dbContext.ToDoTasks;
-    }
+    private readonly DbSet<ToDoTask> _toDoTasks = dbContext.ToDoTasks;
 
     public Task<ToDoTask> GetByIdAsync(ToDoTaskId id)
     {

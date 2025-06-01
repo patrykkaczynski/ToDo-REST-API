@@ -6,25 +6,17 @@ using ToDo.Core.ValueObjects;
 
 namespace ToDo.Application.Commands.Handlers;
 
-internal sealed class CreateToDoTaskHandler : ICommandHandler<CreateToDoTask>
+internal sealed class CreateToDoTaskHandler(IToDoTaskRepository repository, IDateTimeProvider dateTimeProvider)
+    : ICommandHandler<CreateToDoTask>
 {
-    private readonly IToDoTaskRepository _repository;
-    private readonly IDateTimeProvider _dateTimeProvider;
-
-    public CreateToDoTaskHandler(IToDoTaskRepository repository, IDateTimeProvider dateTimeProvider)
-    {
-        _repository = repository;
-        _dateTimeProvider = dateTimeProvider;
-    }
-    
     public async Task HandleAsync(CreateToDoTask command)
     {
         var expirationDate = new DateAndTime(command.ExpirationDate);
-        var now = new DateAndTime(_dateTimeProvider.Current());
+        var now = new DateAndTime(dateTimeProvider.Current());
         
         var toDoTask = ToDoTask.Create(command.ToDoTaskId, expirationDate, command.Title,
             command.Description, command.PercentComplete, now);
 
-        await _repository.CreateAsync(toDoTask);
+        await repository.CreateAsync(toDoTask);
     }
 }

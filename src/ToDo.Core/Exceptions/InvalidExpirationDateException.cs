@@ -1,10 +1,7 @@
 namespace ToDo.Core.Exceptions;
 
-public sealed class InvalidExpirationDateException : CustomException
+public sealed class InvalidExpirationDateException(DateTimeOffset expirationDate)
+    : CustomException($"The provided expiration date '{expirationDate}' is invalid. It cannot be in the past or now.")
 {
-    public DateTimeOffset ExpirationDate { get; }
-
-    public InvalidExpirationDateException(DateTimeOffset expirationDate)
-        : base($"The provided expiration date '{expirationDate}' is invalid. It cannot be in the past or now.")
-        => ExpirationDate = expirationDate;
+    public DateTimeOffset ExpirationDate { get; } = expirationDate;
 }

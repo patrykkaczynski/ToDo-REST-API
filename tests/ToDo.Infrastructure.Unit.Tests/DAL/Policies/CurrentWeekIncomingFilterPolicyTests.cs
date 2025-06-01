@@ -3,18 +3,14 @@ using Shouldly;
 using ToDo.Application.Common;
 using ToDo.Core.Abstractions;
 using ToDo.Infrastructure.DAL.Policies;
-using ToDo.Infrastructure.Unit.Tests.Base;
-using ToDo.Infrastructure.Unit.Tests.Persistence;
+using ToDo.Infrastructure.Unit.Tests.DAL.Base;
+using ToDo.Infrastructure.Unit.Tests.DAL.Persistence;
 
 namespace ToDo.Infrastructure.Unit.Tests.DAL.Policies;
 
 [Collection(nameof(InMemoryDbCollection))]
-public class CurrentWeekIncomingFilterPolicyTests : TestBase
+public class CurrentWeekIncomingFilterPolicyTests(InMemoryDbContextFixture fixture) : TestBase(fixture)
 {
-    public CurrentWeekIncomingFilterPolicyTests(InMemoryDbContextFixture fixture) : base(fixture)
-    {
-    }
-
     [Theory]
     [InlineData(IncomingFilter.CurrentWeek, true)]
     [InlineData(IncomingFilter.Today, false)]
@@ -25,7 +21,7 @@ public class CurrentWeekIncomingFilterPolicyTests : TestBase
         // Arrange
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();
 
-        var policy = new CurrentWeekIncomingFilterPolicy(_dbContext, dateTimeProviderMock.Object);
+        var policy = new CurrentWeekIncomingFilterPolicy(DbContext, dateTimeProviderMock.Object);
 
         // Act 
         var result = policy.CanBeApplied(incomingFilter);
@@ -40,9 +36,9 @@ public class CurrentWeekIncomingFilterPolicyTests : TestBase
         // Arrange
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();
         dateTimeProviderMock.Setup(p => p.Current())
-            .Returns(_now);
+            .Returns(Now);
 
-        var policy = new CurrentWeekIncomingFilterPolicy(_dbContext, dateTimeProviderMock.Object);
+        var policy = new CurrentWeekIncomingFilterPolicy(DbContext, dateTimeProviderMock.Object);
 
         // Act 
         var result = (await policy.GetIncomingToDoTasksAsync()).ToList();

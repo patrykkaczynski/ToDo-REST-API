@@ -4,19 +4,15 @@ using ToDo.Application.DTO;
 using ToDo.Application.Queries;
 using ToDo.Infrastructure.DAL.Handlers;
 using ToDo.Infrastructure.Exceptions;
-using ToDo.Infrastructure.Unit.Tests.Base;
-using ToDo.Infrastructure.Unit.Tests.Persistence;
+using ToDo.Infrastructure.Unit.Tests.DAL.Base;
+using ToDo.Infrastructure.Unit.Tests.DAL.Persistence;
 using SortDirection = ToDo.Application.Common.SortDirection;
 
 namespace ToDo.Infrastructure.Unit.Tests.DAL.Handlers;
 
 [Collection(nameof(InMemoryDbCollection))]
-public class GetToDoTasksHandlerTests : TestBase
+public class GetToDoTasksHandlerTests(InMemoryDbContextFixture fixture) : TestBase(fixture)
 {
-    public GetToDoTasksHandlerTests(InMemoryDbContextFixture fixture) : base(fixture)
-    {
-    }
-
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
@@ -28,7 +24,7 @@ public class GetToDoTasksHandlerTests : TestBase
         // Arrange
         var query = new GetToDoTasks(null, 1, pageSize, null, SortDirection.Ascending);
 
-        var handler = new GetToDoTasksHandler(_dbContext);
+        var handler = new GetToDoTasksHandler(DbContext);
 
         // Act
         var result = await Record.ExceptionAsync(async () => await handler.HandleAsync(query));
@@ -44,7 +40,7 @@ public class GetToDoTasksHandlerTests : TestBase
         // Arrange
         var query = new GetToDoTasks("Wrong search phrase", 1, 5, null, SortDirection.Ascending);
 
-        var handler = new GetToDoTasksHandler(_dbContext);
+        var handler = new GetToDoTasksHandler(DbContext);
 
         var expectedResult = new PagedResult<ToDoTaskDto>
         {
@@ -82,7 +78,7 @@ public class GetToDoTasksHandlerTests : TestBase
         // Arrange
         var query = new GetToDoTasks("Title", pageNumber, pageSize, null, SortDirection.Ascending);
 
-        var handler = new GetToDoTasksHandler(_dbContext);
+        var handler = new GetToDoTasksHandler(DbContext);
 
         // Act
         var result = await Record.ExceptionAsync(async () => await handler.HandleAsync(query));
@@ -107,7 +103,7 @@ public class GetToDoTasksHandlerTests : TestBase
         // Arrange
         var query = new GetToDoTasks("Title", 1, 5, sortByColumnName, SortDirection.Ascending);
 
-        var handler = new GetToDoTasksHandler(_dbContext);
+        var handler = new GetToDoTasksHandler(DbContext);
 
         // Act
         var result = await Record.ExceptionAsync(async () => await handler.HandleAsync(query));
@@ -157,7 +153,7 @@ public class GetToDoTasksHandlerTests : TestBase
         // Arrange
         var query = new GetToDoTasks(searchPhrase, pageNumber, pageSize, sortByColumnName, sortDirection);
 
-        var handler = new GetToDoTasksHandler(_dbContext);
+        var handler = new GetToDoTasksHandler(DbContext);
 
         // Act
         var result = await handler.HandleAsync(query);
