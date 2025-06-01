@@ -2,15 +2,19 @@ using Moq;
 using Shouldly;
 using ToDo.Application.Common;
 using ToDo.Core.Abstractions;
-using ToDo.Infrastructure.DAL.Persistence;
 using ToDo.Infrastructure.DAL.Policies;
+using ToDo.Infrastructure.Unit.Tests.Base;
 using ToDo.Infrastructure.Unit.Tests.Persistence;
 
 namespace ToDo.Infrastructure.Unit.Tests.DAL.Policies;
 
 [Collection(nameof(InMemoryDbCollection))]
-public class CurrentWeekIncomingFilterPolicyTests
+public class CurrentWeekIncomingFilterPolicyTests : TestBase
 {
+    public CurrentWeekIncomingFilterPolicyTests(InMemoryDbContextFixture fixture) : base(fixture)
+    {
+    }
+
     [Theory]
     [InlineData(IncomingFilter.CurrentWeek, true)]
     [InlineData(IncomingFilter.Today, false)]
@@ -20,7 +24,7 @@ public class CurrentWeekIncomingFilterPolicyTests
     {
         // Arrange
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();
-        
+
         var policy = new CurrentWeekIncomingFilterPolicy(_dbContext, dateTimeProviderMock.Object);
 
         // Act 
@@ -37,7 +41,7 @@ public class CurrentWeekIncomingFilterPolicyTests
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();
         dateTimeProviderMock.Setup(p => p.Current())
             .Returns(_now);
-        
+
         var policy = new CurrentWeekIncomingFilterPolicy(_dbContext, dateTimeProviderMock.Object);
 
         // Act 
@@ -48,21 +52,9 @@ public class CurrentWeekIncomingFilterPolicyTests
         {
             "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9"
         };
-        
+
         result.ShouldNotBeEmpty();
         result.Count.ShouldBe(9);
         result.Select(t => t.Title).ShouldBe(expectedTitles, ignoreOrder: true);
     }
-
-    #region ARRANGE
-
-    private readonly ToDoDbContext _dbContext;
-    private readonly DateTime _now;
-    public CurrentWeekIncomingFilterPolicyTests(InMemoryDbContextFixture fixture)
-    {
-        _dbContext = fixture.DbContext;
-        _now = InMemoryDbContextFixture.Now;
-    }
-    
-    #endregion
 }

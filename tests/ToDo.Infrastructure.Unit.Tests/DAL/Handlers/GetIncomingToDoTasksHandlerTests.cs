@@ -4,16 +4,20 @@ using ToDo.Application.Common;
 using ToDo.Application.Queries;
 using ToDo.Core.Abstractions;
 using ToDo.Infrastructure.DAL.Handlers;
-using ToDo.Infrastructure.DAL.Persistence;
 using ToDo.Infrastructure.DAL.Policies;
 using ToDo.Infrastructure.Exceptions;
+using ToDo.Infrastructure.Unit.Tests.Base;
 using ToDo.Infrastructure.Unit.Tests.Persistence;
 
 namespace ToDo.Infrastructure.Unit.Tests.DAL.Handlers;
 
 [Collection(nameof(InMemoryDbCollection))]
-public class GetIncomingToDoTasksHandlerTests
+public class GetIncomingToDoTasksHandlerTests : TestBase
 {
+    public GetIncomingToDoTasksHandlerTests(InMemoryDbContextFixture fixture) : base(fixture)
+    {
+    }
+
     [Fact]
     public async Task Handling_GetIncomingToDoTasks_Query_With_Existing_Policy_Should_Return_ToDoTaskDtos()
     {
@@ -57,17 +61,4 @@ public class GetIncomingToDoTasksHandlerTests
         result.ShouldNotBeNull();
         result.ShouldBeOfType<NoIncomingFilterPolicyFoundException>();
     }
-
-    #region ARRANGE
-
-    private readonly ToDoDbContext _dbContext;
-    private readonly DateTime _now;
-
-    public GetIncomingToDoTasksHandlerTests(InMemoryDbContextFixture fixture)
-    {
-        _dbContext = fixture.DbContext;
-        _now = InMemoryDbContextFixture.Now;
-    }
-
-    #endregion
 }

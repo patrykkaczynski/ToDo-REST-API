@@ -3,16 +3,20 @@ using ToDo.Application.Common;
 using ToDo.Application.DTO;
 using ToDo.Application.Queries;
 using ToDo.Infrastructure.DAL.Handlers;
-using ToDo.Infrastructure.DAL.Persistence;
 using ToDo.Infrastructure.Exceptions;
+using ToDo.Infrastructure.Unit.Tests.Base;
 using ToDo.Infrastructure.Unit.Tests.Persistence;
 using SortDirection = ToDo.Application.Common.SortDirection;
 
 namespace ToDo.Infrastructure.Unit.Tests.DAL.Handlers;
 
 [Collection(nameof(InMemoryDbCollection))]
-public class GetToDoTasksHandlerTests
+public class GetToDoTasksHandlerTests : TestBase
 {
+    public GetToDoTasksHandlerTests(InMemoryDbContextFixture fixture) : base(fixture)
+    {
+    }
+
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
@@ -164,14 +168,5 @@ public class GetToDoTasksHandlerTests
         result.TotalItemsCount.ShouldBe(totalCount);
         itemsResult.First().Title.ShouldBe(firstTitle);
         itemsResult.Last().Title.ShouldBe(lastTitle);
-    }
-
-    private readonly ToDoDbContext _dbContext;
-    private readonly DateTime _now;
-
-    public GetToDoTasksHandlerTests(InMemoryDbContextFixture fixture)
-    {
-        _dbContext = fixture.DbContext;
-        _now = InMemoryDbContextFixture.Now;
     }
 }

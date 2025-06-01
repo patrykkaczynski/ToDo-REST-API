@@ -2,15 +2,19 @@ using Moq;
 using Shouldly;
 using ToDo.Application.Common;
 using ToDo.Core.Abstractions;
-using ToDo.Infrastructure.DAL.Persistence;
 using ToDo.Infrastructure.DAL.Policies;
+using ToDo.Infrastructure.Unit.Tests.Base;
 using ToDo.Infrastructure.Unit.Tests.Persistence;
 
 namespace ToDo.Infrastructure.Unit.Tests.DAL.Policies;
 
 [Collection(nameof(InMemoryDbCollection))]
-public class TodayIncomingFilterPolicyTests 
+public class TodayIncomingFilterPolicyTests : TestBase
 {
+    public TodayIncomingFilterPolicyTests(InMemoryDbContextFixture fixture) : base(fixture)
+    {
+    }
+
     [Theory]
     [InlineData(IncomingFilter.CurrentWeek, false)]
     [InlineData(IncomingFilter.Today, true)]
@@ -20,7 +24,7 @@ public class TodayIncomingFilterPolicyTests
     {
         // Arrange
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();
-        
+
         var policy = new TodayIncomingFilterPolicy(_dbContext, dateTimeProviderMock.Object);
 
         // Act 
@@ -37,29 +41,17 @@ public class TodayIncomingFilterPolicyTests
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();
         dateTimeProviderMock.Setup(p => p.Current())
             .Returns(_now);
-        
+
         var policy = new TodayIncomingFilterPolicy(_dbContext, dateTimeProviderMock.Object);
 
         // Act 
         var result = (await policy.GetIncomingToDoTasksAsync()).ToList();
 
         // Assert
-        var expectedTitles = new[] { "Title 1", "Title 2"};
-        
+        var expectedTitles = new[] { "Title 1", "Title 2" };
+
         result.ShouldNotBeEmpty();
         result.Count.ShouldBe(2);
         result.Select(t => t.Title).ShouldBe(expectedTitles, ignoreOrder: true);
     }
-
-    #region ARRANGE
-
-    private readonly ToDoDbContext _dbContext;
-    private readonly DateTime _now;
-    public TodayIncomingFilterPolicyTests(InMemoryDbContextFixture fixture)
-    {
-        _dbContext = fixture.DbContext;
-        _now = InMemoryDbContextFixture.Now;
-    }
-    
-    #endregion
 }
