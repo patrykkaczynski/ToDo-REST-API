@@ -13,6 +13,4 @@ public static class Extensions
             Title = entity.Title,
             PercentComplete = entity.PercentComplete
         };
-    
-    
 }
