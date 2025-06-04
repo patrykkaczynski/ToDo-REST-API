@@ -14,8 +14,7 @@ public class GetToDoTaskHandlerTests(InMemoryDbContextFixture fixture) : TestBas
     [InlineData("240d2448-4c52-4fce-a26d-2a78a97fd56e", "Title 1")]
     [InlineData("940521da-1c33-4ec7-a869-3c29ef3cf05f", "Title 6")]
     [InlineData("6e96bb1e-3089-4817-9019-7da90af741ca", "Title 12")]
-    public async Task Handling_GetToDoTask_Query_With_Existing_ToDoTaskId_Should_Return_ToDoTaskDto(string id,
-        string expectedTitle)
+    public async Task HandleAsync_WhenToDoTaskIdExists_ShouldReturnToDoTaskDto(string id, string expectedTitle)
     {
         // Arrange
         var toDoTaskId = Guid.Parse(id);
@@ -33,7 +32,7 @@ public class GetToDoTaskHandlerTests(InMemoryDbContextFixture fixture) : TestBas
     }
 
     [Fact]
-    public async Task Handling_GetToDoTask_Query_With_Nonexistent_ToDoTaskId_Should_Throw_ToDoTaskNotFoundException()
+    public async Task HandleAsync_WhenToDoTaskIdDoesNotExist_ShouldThrowToDoTaskNotFoundException()
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();

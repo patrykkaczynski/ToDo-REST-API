@@ -12,7 +12,7 @@ namespace ToDo.Application.Unit.Tests.Commands.Handlers;
 public class DeleteToDoTaskHandlerTests
 {
     [Fact]
-    public async Task Handling_DeleteToDoTask_Command_With_Valid_ToDoTaskId_Should_Delete_ToDoTask()
+    public async Task HandleAsync_WhenDeleteToDoTaskCommandWithValidToDoTaskIdIsHandled_ShouldDeleteToDoTask()
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();
@@ -38,7 +38,7 @@ public class DeleteToDoTaskHandlerTests
 
     [Fact]
     public async Task
-        Handling_DeleteToDoTask_Command_With_Nonexistent_ToDoTaskId_Should_Throw_ToDoTaskNotFoundException()
+        HandleAsync_WhenDeleteToDoTaskCommandWithNonexistentToDoTaskIdIsHandled_ShouldThrowToDoTaskNotFoundException()
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();

@@ -15,7 +15,7 @@ public class TomorrowIncomingFilterPolicyTests(InMemoryDbContextFixture fixture)
     [InlineData(IncomingFilter.CurrentWeek, false)]
     [InlineData(IncomingFilter.Today, false)]
     [InlineData(IncomingFilter.Tomorrow, true)]
-    public void CanBeApplied_With_Various_Filters_Should_Return_Expected_Result(IncomingFilter incomingFilter,
+    public void CanBeApplied_WhenUsingVariousFilters_ShouldReturnExpectedResults(IncomingFilter incomingFilter,
         bool expectedResult)
     {
         // Arrange
@@ -31,7 +31,7 @@ public class TomorrowIncomingFilterPolicyTests(InMemoryDbContextFixture fixture)
     }
 
     [Fact]
-    public async Task GetIncomingToDoTasks_WithTomorrowPolicy_Should_Return_Only_ToDoTaskDtos_ForTomorrow()
+    public async Task GetIncomingToDoTasksAsync_WhenTomorrowPolicyIsApplied_ShouldReturnOnlyTomorrowToDoTasks()
     {
         // Arrange
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();

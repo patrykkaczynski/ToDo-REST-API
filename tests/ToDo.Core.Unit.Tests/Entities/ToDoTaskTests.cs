@@ -9,8 +9,7 @@ public class ToDoTaskTests
 {
     [Theory]
     [MemberData(nameof(InvalidExpirationDates))]
-    public void Creating_ToDoTask_With_ExpirationDate_In_The_Past_Or_Now_Should_Throw_InvalidExpirationDateException(
-        DateTime expiredAt)
+    public void Create_WhenExpirationDateIsInPastOrNow_ShouldThrowInvalidExpirationDateException(DateTime expiredAt)
     {
         // Arrange
         var expirationDate = new DateAndTime(expiredAt);
@@ -27,7 +26,7 @@ public class ToDoTaskTests
 
     [Theory]
     [MemberData(nameof(ValidExpirationDates))]
-    public void Creating_ToDoTask_With_Valid_ExpirationDate_Should_Succeed(DateTime expiredAt)
+    public void Create_WhenExpirationDateIsValid_ShouldSucceed(DateTime expiredAt)
     {
         // Arrange
         var toDoTaskId = new ToDoTaskId(Guid.NewGuid());
@@ -52,8 +51,7 @@ public class ToDoTaskTests
 
     [Theory]
     [MemberData(nameof(InvalidExpirationDates))]
-    public void Updating_ToDoTask_With_ExpirationDate_In_The_Past_Or_Now_Should_Throw_InvalidExpirationDateException(
-        DateTime expiredAt)
+    public void Update_WhenExpirationDateIsInPastOrNow_ShouldThrowInvalidExpirationDateException(DateTime expiredAt)
     {
         // Arrange
         var expirationDate = new DateAndTime(Now.AddDays(1));
@@ -72,7 +70,7 @@ public class ToDoTaskTests
 
     [Theory]
     [MemberData(nameof(ValidExpirationDates))]
-    public void Updating_ToDoTask_With_Valid_ExpirationDate_Should_Succeed(DateTime expiredAt)
+    public void Update_WhenExpirationDateIsValid_ShouldSucceed(DateTime expiredAt)
     {
         // Arrange
         var expirationDate = new DateAndTime(expiredAt.AddDays(1));
@@ -81,7 +79,7 @@ public class ToDoTaskTests
         var percentComplete = new PercentComplete(70);
         var now = new DateAndTime(Now);
 
-        var toDoTask = ToDoTask.Create(Guid.NewGuid(), new DateAndTime(expiredAt),"Title", 
+        var toDoTask = ToDoTask.Create(Guid.NewGuid(), new DateAndTime(expiredAt), "Title",
             "Description", new PercentComplete(50), now);
 
         // Act
@@ -96,38 +94,39 @@ public class ToDoTaskTests
     }
 
     [Fact]
-    public void Updating_PercentComplete_Should_Succeed()
+    public void ChangePercentComplete_WhenCalled_ShouldUpdatePercentComplete()
     {
         // Arrange
         var percentComplete = new PercentComplete(80);
-        var toDoTask = ToDoTask.Create(Guid.NewGuid(),  new DateAndTime(Now.AddDays(1)),"Title", 
-            "Description", new PercentComplete(50),   new DateAndTime(Now)); 
-        
+        var toDoTask = ToDoTask.Create(Guid.NewGuid(), new DateAndTime(Now.AddDays(1)), "Title",
+            "Description", new PercentComplete(50), new DateAndTime(Now));
+
         // Act
         toDoTask.ChangePercentComplete(percentComplete);
-        
+
         // Assert
         toDoTask.PercentComplete.ShouldBe(percentComplete);
     }
 
     [Fact]
-    public void Marking_ToDoTask_As_Done_Should_Succeed()
+    public void ChangePercentComplete_WhenSetTo100_ShouldMarkTaskAsDone()
     {
         // Arrange
         var percentComplete = new PercentComplete(100);
-        var toDoTask = ToDoTask.Create(Guid.NewGuid(),  new DateAndTime(Now.AddDays(1)),"Title", 
-            "Description", new PercentComplete(50),   new DateAndTime(Now)); 
-        
+        var toDoTask = ToDoTask.Create(Guid.NewGuid(), new DateAndTime(Now.AddDays(1)), "Title",
+            "Description", new PercentComplete(50), new DateAndTime(Now));
+
         // Act
         toDoTask.ChangePercentComplete(100);
 
         // Assert
         toDoTask.PercentComplete.ShouldBe(percentComplete);
     }
-    
+
     #region ARRANGE
 
-    private static readonly DateTime Now = new DateTime(2025, 04, 28);
+    private static readonly DateTime Now = new DateTime(2025, 4, 28, 
+        0, 0, 0, DateTimeKind.Utc);
 
     public static IEnumerable<object[]> InvalidExpirationDates =>
         new List<object[]>

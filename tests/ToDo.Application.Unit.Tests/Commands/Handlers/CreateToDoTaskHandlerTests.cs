@@ -11,7 +11,7 @@ namespace ToDo.Application.Unit.Tests.Commands.Handlers;
 public class CreateToDoTaskHandlerTests
 {
     [Fact]
-    public async Task Handling_CreateToDoTask_Command_With_Valid_Data_Should_Create_ToDoTask()
+    public async Task HandleAsync_WhenCreateToDoTaskCommandIsValid_ShouldCreateToDoTask()
     {
         // Arrange
         var command = new CreateToDoTask(Guid.NewGuid(), Now.AddDays(1), "Title",

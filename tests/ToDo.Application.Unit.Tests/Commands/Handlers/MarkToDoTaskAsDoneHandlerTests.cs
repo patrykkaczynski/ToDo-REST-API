@@ -12,7 +12,7 @@ namespace ToDo.Application.Unit.Tests.Commands.Handlers;
 public class MarkToDoTaskAsDoneHandlerTests
 {
     [Fact]
-    public async Task Handling_MarkToDoTaskAsDone_Command_With_Valid_ToDoTaskId_Should_Mark_As_Done()
+    public async Task HandleAsync_WhenMarkToDoTaskAsDoneCommandWithValidToDoTaskIdIsHandled_ShouldMarkAsDone()
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();
@@ -41,7 +41,7 @@ public class MarkToDoTaskAsDoneHandlerTests
 
     [Fact]
     public async Task
-        Handling_MarkToDoTaskAsDone_Command_With_Nonexistent_ToDoTaskId_Should_Throw_ToDoTaskNotFoundException()
+        HandleAsync_WhenMarkToDoTaskAsDoneCommandWithNonexistentToDoTaskIdIsHandled_ShouldThrowToDoTaskNotFoundException()
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();

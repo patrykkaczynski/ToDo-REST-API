@@ -18,8 +18,7 @@ public class GetToDoTasksHandlerTests(InMemoryDbContextFixture fixture) : TestBa
     [InlineData(2)]
     [InlineData(4)]
     [InlineData(100)]
-    public async Task Handling_GetToDoTasks_Query_With_Invalid_PageSize_Should_Throw_InvalidPageSizeException
-        (int pageSize)
+    public async Task HandleAsync_WhenPageSizeIsInvalid_ShouldThrowInvalidPageSizeException(int pageSize)
     {
         // Arrange
         var query = new GetToDoTasks(null, 1, pageSize, null, SortDirection.Ascending);
@@ -35,10 +34,11 @@ public class GetToDoTasksHandlerTests(InMemoryDbContextFixture fixture) : TestBa
     }
 
     [Fact]
-    public async Task Handling_GetToDoTasks_Query_With_NonMatching_SearchPhrase_Should_Return_Empty_PagedResult()
+    public async Task HandleAsync_WhenSearchPhraseDoesNotMatchAnyTasks_ShouldReturnEmptyPagedResult()
     {
         // Arrange
-        var query = new GetToDoTasks("Wrong search phrase", 1, 5, null, SortDirection.Ascending);
+        var query = new GetToDoTasks("Wrong search phrase", 1, 5, 
+            null, SortDirection.Ascending);
 
         var handler = new GetToDoTasksHandler(DbContext);
 
@@ -72,8 +72,8 @@ public class GetToDoTasksHandlerTests(InMemoryDbContextFixture fixture) : TestBa
     [InlineData(25, 2)]
     [InlineData(50, 0)]
     [InlineData(50, 2)]
-    public async Task Handling_GetToDoTasks_Query_With_Invalid_PageNumber_Should_Throw_InvalidPageNumberException
-        (int pageSize, int pageNumber)
+    public async Task HandleAsync_WhenPageNumberIsInvalid_ShouldThrowInvalidPageNumberException(int pageSize,
+        int pageNumber)
     {
         // Arrange
         var query = new GetToDoTasks("Title", pageNumber, pageSize, null, SortDirection.Ascending);
@@ -96,8 +96,7 @@ public class GetToDoTasksHandlerTests(InMemoryDbContextFixture fixture) : TestBa
     [InlineData("titlee")]
     [InlineData("Desc")]
     [InlineData("ppercentCComplete")]
-    public async Task
-        Handling_GetToDoTasks_Query_With_Invalid_SortByColumnName_Should_Throw_InvalidSortByColumnNameException
+    public async Task HandleAsync_WhenSortByColumnNameIsInvalid_ShouldThrowInvalidSortByColumnNameException
         (string sortByColumnName)
     {
         // Arrange
@@ -146,9 +145,9 @@ public class GetToDoTasksHandlerTests(InMemoryDbContextFixture fixture) : TestBa
         SortDirection.Descending, 15, "Title 10", "Title 6")]
     [InlineData(null, 3, 5, "ExpirationDate",
         SortDirection.Descending, 15, "Title 5", "Title 1")]
-    public async Task Handling_GetToDoTasks_Query_With_Valid_Data_Should_Returns_PaginatedResult
-    (string searchPhrase, int pageNumber, int pageSize, string sortByColumnName, SortDirection sortDirection,
-        int totalCount, string firstTitle, string lastTitle)
+    public async Task HandleAsync_WhenValidQueryProvided_ShouldReturnPaginatedResult(string searchPhrase,
+        int pageNumber, int pageSize, string sortByColumnName, SortDirection sortDirection, int totalCount,
+        string firstTitle, string lastTitle)
     {
         // Arrange
         var query = new GetToDoTasks(searchPhrase, pageNumber, pageSize, sortByColumnName, sortDirection);

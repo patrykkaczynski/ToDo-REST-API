@@ -13,7 +13,7 @@ namespace ToDo.Application.Unit.Tests.Commands.Handlers;
 public class UpdateToDoTaskHandlerTests
 {
     [Fact]
-    public async Task Handling_UpdateToDoTask_Command_With_Valid_ToDoTaskId_Should_Update_ToDoTask()
+    public async Task HandleAsync_WhenUpdateToDoTaskCommandWithValidToDoTaskIdIsHandled_ShouldUpdateToDoTask()
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();
@@ -48,7 +48,7 @@ public class UpdateToDoTaskHandlerTests
 
     [Fact]
     public async Task
-        Handling_UpdateToDoTask_Command_With_Nonexistent_ToDoTaskId_Should_Throw_ToDoTaskNotFoundException()
+        HandleAsync_WhenUpdateToDoTaskCommandWithNonexistentToDoTaskIdIsHandled_ShouldThrowToDoTaskNotFoundException()
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();

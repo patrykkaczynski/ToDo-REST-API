@@ -10,7 +10,7 @@ namespace ToDo.Infrastructure.Unit.Tests.DAL.Repositories;
 public class ToDoTaskRepositoryTests
 {
     [Fact]
-    public async Task GetById_With_Existing_ToDoTaskId_Should_Return_ToDoTask()
+    public async Task GetByIdAsync_WhenToDoTaskExists_ShouldReturnToDoTask()
     {
         // Arrange
         var repository = new ToDoTaskRepository(_dbContext);
@@ -33,7 +33,7 @@ public class ToDoTaskRepositoryTests
     }
 
     [Fact]
-    public async Task GetById_With_Nonexistent_ToDoTaskId_Should_Return_Null()
+    public async Task GetByIdAsync_WhenToDoTaskDoesNotExist_ShouldReturnNull()
     {
         // Arrange
         var repository = new ToDoTaskRepository(_dbContext);
@@ -47,7 +47,7 @@ public class ToDoTaskRepositoryTests
     }
 
     [Fact]
-    public async Task Create_Should_Add_ToDoTask_To_Database()
+    public async Task CreateAsync_WhenToDoTaskIsValid_ShouldAddItToDatabase()
     {
         // Arrange
         var repository = new ToDoTaskRepository(_dbContext);
@@ -70,7 +70,7 @@ public class ToDoTaskRepositoryTests
     }
 
     [Fact]
-    public async Task Update_Should_Modify_ToDoTask_In_Database()
+    public async Task UpdateAsync_WhenToDoTaskExists_ShouldModifyItInDatabase()
     {
         // Arrange
         var toDoTask = ToDoTask.Create(Guid.NewGuid(), new DateAndTime(Now.AddDays(2)),
@@ -99,7 +99,7 @@ public class ToDoTaskRepositoryTests
     }
 
     [Fact]
-    public async Task Delete_Should_Remove_ToDoTask_From_Database()
+    public async Task DeleteAsync_WhenToDoTaskExists_ShouldRemoveItFromDatabase()
     {
         // Arrange
         var toDoTask = ToDoTask.Create(Guid.NewGuid(), new DateAndTime(Now.AddDays(2)),

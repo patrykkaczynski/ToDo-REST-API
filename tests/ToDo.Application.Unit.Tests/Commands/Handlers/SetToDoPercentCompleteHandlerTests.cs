@@ -13,7 +13,7 @@ public class SetToDoPercentCompleteHandlerTests
 {
     [Fact]
     public async Task
-        Handling_SetToDoTaskPercentComplete_Command_With_Valid_ToDoTaskId_Should_Update_PercentComplete()
+        HandleAsync_WhenSetToDoTaskPercentCompleteCommandWithValidToDoTaskIdIsHandled_ShouldUpdatePercentComplete()
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();
@@ -40,7 +40,7 @@ public class SetToDoPercentCompleteHandlerTests
 
     [Fact]
     public async Task
-        Handling_SetToDoTaskPercentComplete_Command_With_Nonexistent_ToDoTaskId_Should_Throw_ToDoTaskNotFoundException()
+        HandleAsync_WhenSetToDoTaskPercentCompleteCommandWithNonexistentToDoTaskIdIsHandled_ShouldThrowToDoTaskNotFoundException()
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();

@@ -15,7 +15,7 @@ namespace ToDo.Infrastructure.Unit.Tests.DAL.Handlers;
 public class GetIncomingToDoTasksHandlerTests(InMemoryDbContextFixture fixture) : TestBase(fixture)
 {
     [Fact]
-    public async Task Handling_GetIncomingToDoTasks_Query_With_Existing_Policy_Should_Return_ToDoTaskDtos()
+    public async Task HandleAsync_WhenExistingPolicyIsProvided_ShouldReturnToDoTaskDtos()
     {
         // Arrange
         var query = new GetIncomingToDoTasks(IncomingFilter.Today);
@@ -40,8 +40,7 @@ public class GetIncomingToDoTasksHandlerTests(InMemoryDbContextFixture fixture) 
     }
 
     [Fact]
-    public async Task
-        Handling_GetIncomingToDoTasks_Query_With_Nonexistent_Policy_Should_Throw_NoIncomingFilterPolicyFoundException()
+    public async Task HandleAsync_WhenNoPolicyIsProvided_ShouldThrowNoIncomingFilterPolicyFoundException()
     {
         // Arrange
         var query = new GetIncomingToDoTasks(IncomingFilter.Today);
