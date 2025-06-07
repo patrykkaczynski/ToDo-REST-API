@@ -1,10 +1,11 @@
 using Humanizer;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using ToDo.Core.Exceptions;
 
 namespace ToDo.Infrastructure.Middlewares;
 
-internal sealed class ExceptionMiddleware : IMiddleware
+internal sealed class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger): IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
@@ -14,6 +15,7 @@ internal sealed class ExceptionMiddleware : IMiddleware
         }
         catch (Exception exception)
         {
+            logger.LogError(exception, exception.Message);
             await HandleExceptionAsync(context, exception);
         }
     }

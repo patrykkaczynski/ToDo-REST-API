@@ -22,7 +22,7 @@ public class CreateToDoTaskHandlerTests
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();
         dateTimeProviderMock.Setup(p => p.Current())
             .Returns(Now);
-
+        
         var handler = new CreateToDoTaskHandler(toDoTaskRepositoryMock.Object, dateTimeProviderMock.Object);
 
         // Act

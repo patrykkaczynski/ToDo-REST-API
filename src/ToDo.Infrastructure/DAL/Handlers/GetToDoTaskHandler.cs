@@ -24,7 +24,7 @@ internal sealed class GetToDoTaskHandler(ToDoDbContext dbContext) : IQueryHandle
         {
             throw new ToDoTaskNotFoundException(toDoTaskId);
         }
-           
+
         return toDoTask.AsDto();
     }
 }

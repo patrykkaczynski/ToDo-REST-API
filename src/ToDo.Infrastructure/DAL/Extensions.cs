@@ -23,7 +23,8 @@ internal static class Extensions
         var postgresOptions = section.Get<PostgresOptions>();
         
         services.AddDbContext<ToDoDbContext>(opt 
-            => opt.UseNpgsql(postgresOptions.ConnectionString));
+            => opt.UseNpgsql(postgresOptions.ConnectionString)
+                .EnableSensitiveDataLogging());
         
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         

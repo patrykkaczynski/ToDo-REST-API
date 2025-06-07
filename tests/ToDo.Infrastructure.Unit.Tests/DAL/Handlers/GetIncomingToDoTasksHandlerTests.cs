@@ -28,7 +28,7 @@ public class GetIncomingToDoTasksHandlerTests(InMemoryDbContextFixture fixture) 
         {
             new TodayIncomingFilterPolicy(DbContext, dateTimeProviderMock.Object)
         };
-
+        
         var handler = new GetIncomingToDoTasksHandler(policies);
 
         // Act

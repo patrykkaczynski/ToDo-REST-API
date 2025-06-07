@@ -19,7 +19,7 @@ internal sealed class UpdateToDoTaskHandler(IToDoTaskRepository repository, IDat
 
         var expirationDate = new DateAndTime(command.ExpirationDate);
         var now = new DateAndTime(dateTimeProvider.Current());
-        toDoTask.Update(expirationDate, command.Title,command.Description, command.PercentComplete, now);
+        toDoTask.Update(expirationDate, command.Title, command.Description, command.PercentComplete, now);
         await repository.UpdateAsync(toDoTask);
     }
 }

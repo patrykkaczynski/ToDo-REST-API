@@ -13,8 +13,8 @@ internal sealed class LoggingCommandHandlerDecorator<TCommand>(
     public async Task HandleAsync(TCommand command)
     {
         var commandName = typeof(TCommand).Name.Underscore();
-        logger.LogInformation($"Started handling a command: {commandName}...");
+        logger.LogInformation("Started handling command: {CommandName} with data: {@Command}", commandName, command);
         await commandHandler.HandleAsync(command);
-        logger.LogInformation($"Completed handling a command: {commandName}.");
+        logger.LogInformation("Completed handling command: {CommandName} with data: {@Command}", commandName, command);
     }
 }

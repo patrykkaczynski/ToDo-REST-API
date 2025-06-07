@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
 using ToDo.Application.Exceptions;
@@ -14,7 +15,8 @@ public class ExceptionMiddlewareTests
         // Arrange
         var context = new DefaultHttpContext();
         var nextDelegateMock = new Mock<RequestDelegate>();
-        var middleware = new ExceptionMiddleware();
+        var loggerMock = new Mock<ILogger<ExceptionMiddleware>>();
+        var middleware = new ExceptionMiddleware(loggerMock.Object);
         
         // Act
         await middleware.InvokeAsync(context, nextDelegateMock.Object);
@@ -28,7 +30,8 @@ public class ExceptionMiddlewareTests
     {
         // Arrange
         var context = new DefaultHttpContext();
-        var middleware = new ExceptionMiddleware();
+        var loggerMock = new Mock<ILogger<ExceptionMiddleware>>();
+        var middleware = new ExceptionMiddleware(loggerMock.Object);
         var id = Guid.NewGuid();
         var customException = new ToDoTaskNotFoundException(id);
         
@@ -44,7 +47,8 @@ public class ExceptionMiddlewareTests
     {
         // Arrange
         var context = new DefaultHttpContext();
-        var middleware = new ExceptionMiddleware();
+        var loggerMock = new Mock<ILogger<ExceptionMiddleware>>();
+        var middleware = new ExceptionMiddleware(loggerMock.Object);
         var exception = new Exception();
         
         // Act

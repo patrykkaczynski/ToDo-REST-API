@@ -11,6 +11,7 @@ public static class Extensions
     internal static IServiceCollection AddCustomLogging(this IServiceCollection services)
     {
         services.TryDecorate(typeof(ICommandHandler<>), typeof(LoggingCommandHandlerDecorator<>));
+        services.TryDecorate(typeof(IQueryHandler<,>), typeof(LoggingQueryHandlerDecorator<,>));
 
         return services;
     }
@@ -18,17 +19,8 @@ public static class Extensions
     public static WebApplicationBuilder UseSerilog(this WebApplicationBuilder builder)
     {
         builder.Host.UseSerilog((context, configuration) =>
-        {
-            configuration
-                .WriteTo
-                .Console()
-                .WriteTo
-                .File("logs/logs.txt")
-                .WriteTo
-                .Seq("http://localhost:5341");
-        });
-        
+            configuration.ReadFrom.Configuration(context.Configuration));
+
         return builder;
     }
-    
 }

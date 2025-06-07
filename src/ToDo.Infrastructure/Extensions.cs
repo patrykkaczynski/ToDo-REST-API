@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using ToDo.Core.Abstractions;
 using ToDo.Infrastructure.DAL;
 using ToDo.Infrastructure.Logging;
@@ -25,6 +26,8 @@ public static class Extensions
 
     public static WebApplication UseInfrastructure(this WebApplication app)
     {
+        app.UseSerilogRequestLogging();
+        
         app.UseMiddleware<ExceptionMiddleware>();
 
         return app;
