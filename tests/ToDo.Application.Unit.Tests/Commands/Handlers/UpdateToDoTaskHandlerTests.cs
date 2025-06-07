@@ -3,6 +3,7 @@ using Shouldly;
 using ToDo.Application.Commands;
 using ToDo.Application.Commands.Handlers;
 using ToDo.Application.Exceptions;
+using ToDo.Application.Unit.Tests.Time;
 using ToDo.Core.Abstractions;
 using ToDo.Core.Entities;
 using ToDo.Core.Repositories;
@@ -17,10 +18,10 @@ public class UpdateToDoTaskHandlerTests
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();
-        var toDoTask = ToDoTask.Create(toDoTaskId, new DateAndTime(Now.AddDays(2)),
-            "Title", "Description", 20, new DateAndTime(Now));
+        var toDoTask = ToDoTask.Create(toDoTaskId, new DateAndTime(_now.AddDays(2)),
+            "Title", "Description", 20, new DateAndTime(_now));
 
-        var command = new UpdateToDoTask(toDoTaskId, Now.AddDays(3),
+        var command = new UpdateToDoTask(toDoTaskId, _now.AddDays(3),
             "Updated Title", "Updated Description", 80);
 
         var toDoTaskRepositoryMock = new Mock<IToDoTaskRepository>();
@@ -29,7 +30,7 @@ public class UpdateToDoTaskHandlerTests
 
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();
         dateTimeProviderMock.Setup(p => p.Current())
-            .Returns(Now);
+            .Returns(_now);
 
         var handler = new UpdateToDoTaskHandler(toDoTaskRepositoryMock.Object, dateTimeProviderMock.Object);
 
@@ -53,7 +54,7 @@ public class UpdateToDoTaskHandlerTests
         // Arrange
         var toDoTaskId = Guid.NewGuid();
 
-        var command = new UpdateToDoTask(toDoTaskId, Now.AddDays(3),
+        var command = new UpdateToDoTask(toDoTaskId, _now.AddDays(3),
             "Updated Title", "Updated Description", 80);
 
         var toDoTaskRepositoryMock = new Mock<IToDoTaskRepository>();
@@ -62,7 +63,7 @@ public class UpdateToDoTaskHandlerTests
 
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();
         dateTimeProviderMock.Setup(p => p.Current())
-            .Returns(Now);
+            .Returns(_now);
 
         var handler = new UpdateToDoTaskHandler(toDoTaskRepositoryMock.Object, dateTimeProviderMock.Object);
 
@@ -76,7 +77,7 @@ public class UpdateToDoTaskHandlerTests
 
     #region ARRANGE
 
-    private static readonly DateTime Now = new(2025, 04, 28);
+    private readonly DateTime _now = new TestDateTimeProvider().Current();
 
     #endregion
 }

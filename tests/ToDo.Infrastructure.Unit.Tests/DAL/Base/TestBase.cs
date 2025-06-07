@@ -1,5 +1,6 @@
 using ToDo.Infrastructure.DAL.Persistence;
 using ToDo.Infrastructure.Unit.Tests.DAL.Persistence;
+using ToDo.Infrastructure.Unit.Tests.Time;
 
 namespace ToDo.Infrastructure.Unit.Tests.DAL.Base;
 
@@ -12,7 +13,7 @@ public class TestBase
     protected TestBase(InMemoryDbContextFixture fixture)
     {
         DbContext = fixture.DbContext;
-        Now = InMemoryDbContextFixture.Now;
+        Now =  new TestDateTimeProvider().Current();
     }
 
     public TestBase()

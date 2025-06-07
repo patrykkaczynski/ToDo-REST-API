@@ -2,13 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using ToDo.Core.Entities;
 using ToDo.Core.ValueObjects;
 using ToDo.Infrastructure.DAL.Persistence;
+using ToDo.Infrastructure.Unit.Tests.Time;
 
 namespace ToDo.Infrastructure.Unit.Tests.DAL.Persistence;
 
 public class InMemoryDbContextFixture : IAsyncLifetime
 {
     internal ToDoDbContext DbContext { get; set; }
-    public static DateTime Now => new DateTime(2025, 4, 28, 0,0,0, DateTimeKind.Utc);
+    private static DateTime Now => new TestDateTimeProvider().Current();
 
     public async Task InitializeAsync()
     {

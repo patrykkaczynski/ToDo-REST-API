@@ -1,12 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Logging;
-using Moq;
 using Shouldly;
 using ToDo.Core.Entities;
 using ToDo.Core.ValueObjects;
 using ToDo.Infrastructure.DAL.Persistence;
 using ToDo.Infrastructure.DAL.UnitOfWork;
+using ToDo.Infrastructure.Unit.Tests.Time;
 
 namespace ToDo.Infrastructure.Unit.Tests.DAL.UnitOfWork;
 
@@ -17,8 +16,8 @@ public class PostgresUnitOfWorkTests
     {
         // Arrange
         var unitOfWork = new PostgresUnitOfWork(_dbContext);
-        var toDoTask = ToDoTask.Create(Guid.NewGuid(), new DateAndTime(Now.AddDays(4)),
-            "Title", "Description", 50, new DateAndTime(Now));
+        var toDoTask = ToDoTask.Create(Guid.NewGuid(), new DateAndTime(_now.AddDays(4)),
+            "Title", "Description", 50, new DateAndTime(_now));
 
         // Act
         await unitOfWork.ExecuteAsync(() =>
@@ -37,8 +36,8 @@ public class PostgresUnitOfWorkTests
     {
         // Arrange
         var unitOfWork = new PostgresUnitOfWork(_dbContext);
-        var toDoTask = ToDoTask.Create(Guid.NewGuid(), new DateAndTime(Now.AddDays(4)),
-            "Title", "Description", 50, new DateAndTime(Now));
+        var toDoTask = ToDoTask.Create(Guid.NewGuid(), new DateAndTime(_now.AddDays(4)),
+            "Title", "Description", 50, new DateAndTime(_now));
 
         // Act
         var exception = await Record.ExceptionAsync(async () =>
@@ -61,7 +60,7 @@ public class PostgresUnitOfWorkTests
     #region ARRANGE
 
     private readonly ToDoDbContext _dbContext;
-    private static DateTime Now => new DateTime(2025, 4, 28, 0, 0, 0, DateTimeKind.Utc);
+    private readonly DateTime _now;
 
     public PostgresUnitOfWorkTests()
     {
@@ -71,6 +70,7 @@ public class PostgresUnitOfWorkTests
             .Options;
 
         _dbContext = new ToDoDbContext(options);
+        _now = new TestDateTimeProvider().Current();
     }
 
     #endregion

@@ -3,6 +3,7 @@ using Shouldly;
 using ToDo.Application.Commands;
 using ToDo.Application.Commands.Handlers;
 using ToDo.Application.Exceptions;
+using ToDo.Application.Unit.Tests.Time;
 using ToDo.Core.Entities;
 using ToDo.Core.Repositories;
 using ToDo.Core.ValueObjects;
@@ -16,8 +17,8 @@ public class DeleteToDoTaskHandlerTests
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();
-        var toDoTask = ToDoTask.Create(toDoTaskId, new DateAndTime(Now.AddDays(2)),
-            "Title", "Description", 80, new DateAndTime(Now));
+        var toDoTask = ToDoTask.Create(toDoTaskId, new DateAndTime(_now.AddDays(2)),
+            "Title", "Description", 80, new DateAndTime(_now));
 
         var command = new DeleteToDoTask(toDoTaskId);
 
@@ -61,7 +62,7 @@ public class DeleteToDoTaskHandlerTests
 
     #region ARRANGE
 
-    private static readonly DateTime Now = new DateTime(2025, 04, 28);
+    private readonly DateTime _now = new TestDateTimeProvider().Current();
 
     #endregion
 }

@@ -1,6 +1,7 @@
 using Moq;
 using ToDo.Application.Commands;
 using ToDo.Application.Commands.Handlers;
+using ToDo.Application.Unit.Tests.Time;
 using ToDo.Core.Abstractions;
 using ToDo.Core.Entities;
 using ToDo.Core.Repositories;
@@ -14,14 +15,14 @@ public class CreateToDoTaskHandlerTests
     public async Task HandleAsync_WhenCreateToDoTaskCommandIsValid_ShouldCreateToDoTask()
     {
         // Arrange
-        var command = new CreateToDoTask(Guid.NewGuid(), Now.AddDays(1), "Title",
+        var command = new CreateToDoTask(Guid.NewGuid(), _now.AddDays(1), "Title",
             "Description", 50);
 
         var toDoTaskRepositoryMock = new Mock<IToDoTaskRepository>();
 
         var dateTimeProviderMock = new Mock<IDateTimeProvider>();
         dateTimeProviderMock.Setup(p => p.Current())
-            .Returns(Now);
+            .Returns(_now);
         
         var handler = new CreateToDoTaskHandler(toDoTaskRepositoryMock.Object, dateTimeProviderMock.Object);
 
@@ -40,7 +41,7 @@ public class CreateToDoTaskHandlerTests
 
     #region ARRANGE
 
-    private static readonly DateTime Now = new DateTime(2025, 04, 28);
+    private readonly DateTime _now = new TestDateTimeProvider().Current();
 
     #endregion
 }
