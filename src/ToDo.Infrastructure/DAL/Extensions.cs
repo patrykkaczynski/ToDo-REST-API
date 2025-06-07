@@ -4,13 +4,13 @@ using Microsoft.Extensions.DependencyInjection;
 using ToDo.Application.Abstractions;
 using ToDo.Core.Repositories;
 using ToDo.Infrastructure.DAL.Abstractions;
-using ToDo.Infrastructure.DAL.Decorators;
 using ToDo.Infrastructure.DAL.Handlers;
 using ToDo.Infrastructure.DAL.Options;
 using ToDo.Infrastructure.DAL.Persistence;
 using ToDo.Infrastructure.DAL.Policies;
 using ToDo.Infrastructure.DAL.Repositories;
 using ToDo.Infrastructure.DAL.UnitOfWork;
+using ToDo.Infrastructure.DAL.UnitOfWork.Decorators;
 
 namespace ToDo.Infrastructure.DAL;
 

@@ -4,7 +4,7 @@ using ToDo.Core.Repositories;
 
 namespace ToDo.Application.Commands.Handlers;
 
-public class SetToDoPercentCompleteHandler(IToDoTaskRepository repository) : ICommandHandler<SetToDoTaskPercentComplete>
+internal sealed class SetToDoPercentCompleteHandler(IToDoTaskRepository repository) : ICommandHandler<SetToDoTaskPercentComplete>
 {
     public async Task HandleAsync(SetToDoTaskPercentComplete command)
     {

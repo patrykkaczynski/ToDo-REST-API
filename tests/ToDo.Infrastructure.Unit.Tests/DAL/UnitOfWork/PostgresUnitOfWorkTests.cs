@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Shouldly;
 using ToDo.Core.Entities;
 using ToDo.Core.ValueObjects;

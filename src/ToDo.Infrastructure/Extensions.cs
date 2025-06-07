@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ToDo.Core.Abstractions;
 using ToDo.Infrastructure.DAL;
+using ToDo.Infrastructure.Logging;
 using ToDo.Infrastructure.Middlewares;
 using ToDo.Infrastructure.Time;
 
@@ -15,8 +16,10 @@ public static class Extensions
         services.AddSingleton<ExceptionMiddleware>();
         services
             .AddPostgres(configuration)
-            .AddSingleton<IDateTimeProvider,  DateTimeProvider>();
-        
+            .AddSingleton<IDateTimeProvider, DateTimeProvider>();
+
+        services.AddCustomLogging();
+
         return services;
     }
 

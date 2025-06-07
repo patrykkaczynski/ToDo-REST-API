@@ -6,7 +6,7 @@ using ToDo.Core.ValueObjects;
 
 namespace ToDo.Application.Commands.Handlers;
 
-public class UpdateToDoTaskHandler(IToDoTaskRepository repository, IDateTimeProvider dateTimeProvider)
+internal sealed class UpdateToDoTaskHandler(IToDoTaskRepository repository, IDateTimeProvider dateTimeProvider)
     : ICommandHandler<UpdateToDoTask>
 {
     public async Task HandleAsync(UpdateToDoTask command)

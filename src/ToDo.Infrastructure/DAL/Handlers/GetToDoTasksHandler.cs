@@ -51,7 +51,7 @@ internal sealed class GetToDoTasksHandler(ToDoDbContext dbContext)
         if (query.SortBy is not null && !PaginationOptions.AllowedSortByColumnNames
                 .Any(x => string.Equals(x, query.SortBy, StringComparison.OrdinalIgnoreCase)))
         {
-            throw new InvalidSortByColumnNameException(query.SortBy);
+            throw new InvalidSortByColumnNameException();
         }
 
         if (query.SortBy is not null)
