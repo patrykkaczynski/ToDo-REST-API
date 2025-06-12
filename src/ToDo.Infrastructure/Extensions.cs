@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using ToDo.Core.Abstractions;
 using ToDo.Infrastructure.DAL;
@@ -18,8 +19,8 @@ public static class Extensions
         services
             .AddPostgres(configuration)
             .AddSingleton<IDateTimeProvider, DateTimeProvider>();
-
         services.AddCustomLogging();
+  
 
         return services;
     }
@@ -27,8 +28,15 @@ public static class Extensions
     public static WebApplication UseInfrastructure(this WebApplication app)
     {
         app.UseSerilogRequestLogging();
-        
         app.UseMiddleware<ExceptionMiddleware>();
+        app.UseSwagger();
+        app.UseSwaggerUI();
+        app.UseReDoc(reDoc =>
+        {
+            reDoc.RoutePrefix = "docs";
+            reDoc.DocumentTitle = "ToDoTask API";
+            reDoc.SpecUrl("/swagger/v1/swagger.json");
+        });
 
         return app;
     }

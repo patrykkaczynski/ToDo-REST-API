@@ -2,6 +2,7 @@ using Humanizer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using ToDo.Core.Exceptions;
+using ToDo.Shared.Errors;
 
 namespace ToDo.Infrastructure.Middlewares;
 
@@ -25,14 +26,12 @@ internal sealed class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger): 
         var (statusCode, response) = exception switch
         {
             CustomException => (StatusCodes.Status400BadRequest,
-                new Response(exception.GetType().Name.Underscore().Replace("_exception", string.Empty),
+                new Error(exception.GetType().Name.Underscore().Replace("_exception", string.Empty),
                     exception.Message)),
-            _ => (StatusCodes.Status500InternalServerError, new Response("error", "There was an error."))
+            _ => (StatusCodes.Status500InternalServerError, new Error("error", "There was an error."))
         };
 
         context.Response.StatusCode = statusCode;
         await context.Response.WriteAsJsonAsync(response);
     }
-
-    private record Response(string Code, string Reason);
 }

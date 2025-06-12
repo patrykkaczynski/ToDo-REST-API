@@ -1,3 +1,5 @@
+using ToDo.Api;
+using ToDo.Api.Swagger;
 using ToDo.Application;
 using ToDo.Core;
 using ToDo.Infrastructure;
@@ -9,6 +11,7 @@ builder.Services
     .AddCore()
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
+    .AddPresentation()
     .AddControllers();
 
 builder.UseSerilog();
@@ -16,6 +19,11 @@ builder.UseSerilog();
 var app = builder.Build();
 
 app.UseInfrastructure();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwaggerDocumentation();
+}
 
 app.MapControllers();
 
