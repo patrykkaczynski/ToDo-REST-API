@@ -60,7 +60,7 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
     {
         _dbContext?.Database.EnsureDeleted();
         _dbContext?.Dispose();
-        _scope.Dispose();
+        _scope?.Dispose();
     }
 
     #endregion
