@@ -42,7 +42,7 @@ public class ToDoTasksController(
         Description = "Fetches details of a to-do task by its unique identifier."
     )]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ToDoTaskDto>> Get(Guid toDoTaskId)
     {
         var toDoTask = await getToDoTaskHandler.HandleAsync(new GetToDoTask(ToDoTaskId: toDoTaskId));

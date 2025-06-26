@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ToDo.Core.Abstractions;
 using ToDo.Infrastructure.DAL.Options;
 using ToDo.Infrastructure.DAL.Persistence;
+using ToDo.Tests.Integration.Time;
 
 namespace ToDo.Tests.Integration;
 
@@ -32,6 +34,8 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
             {
                 options.UseNpgsql(postgresOptions.ConnectionString);
             });
+            
+            services.AddScoped<IDateTimeProvider, TestDateTimeProvider>();
         });
         
         builder.UseEnvironment("test");
