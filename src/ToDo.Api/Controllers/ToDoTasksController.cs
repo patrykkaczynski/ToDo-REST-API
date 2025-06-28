@@ -57,6 +57,7 @@ public class ToDoTasksController(
     )]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<ToDoTaskDto>>> Get([FromQuery] IncomingFilter incomingFilter)
     {
         var toDoTasks = await getIncomingToDoTasksHandler
@@ -88,6 +89,7 @@ public class ToDoTasksController(
     )]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Put(Guid toDoTaskId, UpdateToDoTask command)
     {
         await updateToDoTaskHandler.HandleAsync(command with { ToDoTaskId = toDoTaskId });
@@ -102,6 +104,7 @@ public class ToDoTasksController(
     )]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Patch(Guid toDoTaskId, SetToDoTaskPercentComplete command)
     {
         await setToDoTaskPercentCompleteHandler.HandleAsync(command with { ToDoTaskId = toDoTaskId });
@@ -115,7 +118,7 @@ public class ToDoTasksController(
         Description = "Removes a to-do task permanently based on its ID."
     )]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Delete(Guid toDoTaskId)
     {
         await deleteToDoTaskHandler.HandleAsync(new DeleteToDoTask(ToDoTaskId: toDoTaskId));
@@ -129,7 +132,7 @@ public class ToDoTasksController(
         Description = "Updates the task status to indicate it has been completed."
     )]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(Error), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(Error), StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Patch(Guid toDoTaskId)
     {
         await markToDoTaskAsDoneHandler.HandleAsync(new MarkToDoTaskAsDone(ToDoTaskId: toDoTaskId));
