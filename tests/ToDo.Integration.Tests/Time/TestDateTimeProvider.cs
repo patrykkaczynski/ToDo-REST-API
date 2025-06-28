@@ -1,6 +1,6 @@
 using ToDo.Core.Abstractions;
 
-namespace ToDo.Tests.Integration.Time;
+namespace ToDo.Integration.Tests.Time;
 
 public class TestDateTimeProvider : IDateTimeProvider
 {

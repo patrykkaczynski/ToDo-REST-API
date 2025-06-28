@@ -2,7 +2,8 @@ namespace ToDo.Application.Common;
 
 public enum IncomingFilter
 {
-    Today = 0,
-    Tomorrow = 1,
-    CurrentWeek = 2
+    None = 0,
+    Today = 1,
+    Tomorrow = 2,
+    CurrentWeek = 3
 }

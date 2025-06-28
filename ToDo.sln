@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Infrastructure.Unit.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Shared", "src\ToDo.Shared\ToDo.Shared.csproj", "{C56EAE03-891A-48B9-8816-BFE245098DAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Tests.Integration", "tests\ToDo.Tests.Integration\ToDo.Tests.Integration.csproj", "{13CB8AF6-2480-4289-82C4-22689D096411}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo.Integration.Tests", "tests\ToDo.Integration.Tests\ToDo.Integration.Tests.csproj", "{13CB8AF6-2480-4289-82C4-22689D096411}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

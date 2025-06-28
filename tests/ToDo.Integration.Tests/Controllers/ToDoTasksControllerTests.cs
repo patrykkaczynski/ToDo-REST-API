@@ -8,9 +8,9 @@ using ToDo.Application.DTO;
 using ToDo.Core.Entities;
 using ToDo.Core.ValueObjects;
 using ToDo.Infrastructure.DAL.Persistence;
-using ToDo.Tests.Integration.Time;
+using ToDo.Integration.Tests.Time;
 
-namespace ToDo.Tests.Integration.Controllers;
+namespace ToDo.Integration.Tests.Controllers;
 
 public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>, IDisposable
 {

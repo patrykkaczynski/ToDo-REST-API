@@ -7,9 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using ToDo.Core.Abstractions;
 using ToDo.Infrastructure.DAL.Options;
 using ToDo.Infrastructure.DAL.Persistence;
-using ToDo.Tests.Integration.Time;
+using ToDo.Integration.Tests.Time;
 
-namespace ToDo.Tests.Integration;
+namespace ToDo.Integration.Tests;
 
 public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
 {

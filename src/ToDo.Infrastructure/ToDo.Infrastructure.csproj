@@ -31,7 +31,7 @@
     <ItemGroup>
         <InternalsVisibleTo Include="ToDo.Infrastructure.Unit.Tests" />
         <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
-        <InternalsVisibleTo Include="ToDo.Tests.Integration" />
+        <InternalsVisibleTo Include="ToDo.Integration.Tests" />
     </ItemGroup>
 
 </Project>
