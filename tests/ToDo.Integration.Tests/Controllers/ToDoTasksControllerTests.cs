@@ -19,17 +19,10 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
     public async Task GetToDoTasks_WhenPaginationParametersAreValid_ShouldReturn200Ok()
     {
         // Arrange
-        var title1 = "Title 1";
-        var title2 = "Title 2";
-        var toDoTasks = new List<ToDoTask>
-        {
-            ToDoTask.Create(Guid.NewGuid(), new DateAndTime(_now.AddDays(2)), title1,
-                "Description 1", 50, new DateAndTime(_now)),
-            ToDoTask.Create(Guid.NewGuid(), new DateAndTime(_now.AddDays(4)), title2,
-                "Description 2", 70, new DateAndTime(_now)),
-        };
-        await _dbContext.ToDoTasks.AddRangeAsync(toDoTasks);
-        await _dbContext.SaveChangesAsync();
+        var toDoTask1 = await AddToDoTaskAsync(Guid.NewGuid(), _now.AddDays(2), "Title 1",
+            "Description 1", 50);
+        var toDoTask2 = await AddToDoTaskAsync(Guid.NewGuid(), _now.AddDays(4), "Title 2",
+            "Description 2", 70);
 
         // Act
         var response = await _client
@@ -48,8 +41,8 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
         pagedResult.ItemsTo.ShouldBe(10);
         pagedResult.Items.ToList().Count.ShouldBe(2);
 
-        toDoTasksDtos.First().Title.ShouldBe(title2);
-        toDoTasksDtos.Last().Title.ShouldBe(title1);
+        toDoTasksDtos.First().Title.ShouldBe(toDoTask2.Title);
+        toDoTasksDtos.Last().Title.ShouldBe(toDoTask1.Title);
     }
 
     [Fact]
@@ -69,10 +62,7 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
         // Arrange
         var toDoTaskId = Guid.NewGuid();
         var title = "Title";
-        var toDoTask = ToDoTask.Create(toDoTaskId, new DateAndTime(_now.AddDays(2)), title,
-            "Description", 50, new DateAndTime(_now));
-        await _dbContext.ToDoTasks.AddAsync(toDoTask);
-        await _dbContext.SaveChangesAsync();
+        var toDoTask = await AddToDoTaskAsync(toDoTaskId, _now.AddDays(2), title, "Description", 50);
 
         // Act
         var response = await _client.GetAsync($"{ToDoTasksEndpoint}/{toDoTaskId}");
@@ -81,8 +71,7 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         response.Headers.Location.ShouldBeNull();
-
-        toDoTaskDto.Title.ShouldBe(title);
+        toDoTaskDto.Title.ShouldBe(toDoTask.Title);
     }
 
     [Fact]
@@ -103,51 +92,35 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
     public async Task GetIncomingToDoTasks_WhenIncomingFilterExists_ShouldReturn200Ok()
     {
         // Arrange
-        var title1 = "Title 1";
-        var toDoTasks = new List<ToDoTask>
-        {
-            ToDoTask.Create(Guid.NewGuid(), new DateAndTime(_now.AddHours(5)), title1,
-                "Description 1", 30, new DateAndTime(_now)),
-            ToDoTask.Create(Guid.NewGuid(), new DateAndTime(_now.AddDays(1)), "Title 2",
-                "Description 2", 50, new DateAndTime(_now)),
-            ToDoTask.Create(Guid.NewGuid(), new DateAndTime(_now.AddDays(4)), "Title 3",
-                "Description 3", 70, new DateAndTime(_now)),
-        };
-        await _dbContext.ToDoTasks.AddRangeAsync(toDoTasks);
-        await _dbContext.SaveChangesAsync();
+        var title = "Today Task";
+        await AddToDoTaskAsync(Guid.NewGuid(), _now.AddHours(5), title, "Description 1", 30);
+        await AddToDoTaskAsync(Guid.NewGuid(), _now.AddDays(1), "Title 2", "Description 2", 50);
+        await AddToDoTaskAsync(Guid.NewGuid(), _now.AddDays(4), "Title 3", "Description 3", 70);
 
         // Act
         var response = await _client.GetAsync($"{ToDoTasksEndpoint}/incoming?incomingFilter=Today");
-        var toDoTaskDtos = (await response.Content.ReadFromJsonAsync<IEnumerable<ToDoTaskDto>>())
+        var toDoTasksDtos = (await response.Content.ReadFromJsonAsync<IEnumerable<ToDoTaskDto>>())
             .ToList();
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         response.Headers.Location.ShouldBeNull();
 
-        toDoTaskDtos.Count.ShouldBe(1);
-        toDoTaskDtos.First().Title.ShouldBe(title1);
+        toDoTasksDtos.Count.ShouldBe(1);
+        toDoTasksDtos.First().Title.ShouldBe(title);
     }
 
-    [Fact]
-    public async Task GetIncomingToDoTasks_WhenIncomingFilterDoesNotExist_ShouldReturn400BadRequest()
+    [Theory]
+    [InlineData("CurrentYear", HttpStatusCode.BadRequest)]
+    [InlineData("None", HttpStatusCode.NotFound)]
+    public async Task GetIncomingToDoTasks_WhenIncomingFilterIsInvalid_ShouldReturnExpectedStatus(string filter,
+        HttpStatusCode expectedStatus)
     {
         // Act
-        var response = await _client.GetAsync($"{ToDoTasksEndpoint}/incoming?incomingFilter=CurrentYear");
+        var response = await _client.GetAsync($"{ToDoTasksEndpoint}/incoming?incomingFilter={filter}");
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
-        response.Headers.Location.ShouldBeNull();
-    }
-
-    [Fact]
-    public async Task GetIncomingToDoTasks_WhenIncomingFilterIsInvalid_ShouldReturn404NotFound()
-    {
-        // Act
-        var response = await _client.GetAsync($"{ToDoTasksEndpoint}/incoming?incomingFilter=None");
-
-        // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+        response.StatusCode.ShouldBe(expectedStatus);
         response.Headers.Location.ShouldBeNull();
     }
 
@@ -187,13 +160,9 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();
-        var updatedTitle = "Updated Title";
-        var toDoTask = ToDoTask.Create(toDoTaskId, new DateAndTime(_now.AddDays(2)), "Title",
-            "Description", 50, new DateAndTime(_now));
-        await _dbContext.ToDoTasks.AddAsync(toDoTask);
-        await _dbContext.SaveChangesAsync();
-
-        var command = new UpdateToDoTask(toDoTaskId, toDoTask.ExpirationDate.Value.DateTime, updatedTitle,
+        var toDoTask = await AddToDoTaskAsync(toDoTaskId, _now.AddDays(2), "Title",
+            "Description", 50);
+        var command = new UpdateToDoTask(toDoTaskId, toDoTask.ExpirationDate.Value.DateTime, "Updated Title",
             toDoTask.Description, toDoTask.PercentComplete);
 
         // Act
@@ -210,13 +179,11 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
         // Arrange
         var toDoTaskId = Guid.NewGuid();
         var updatedExpirationDate = _now.AddDays(-2);
-        var toDoTask = ToDoTask.Create(toDoTaskId, new DateAndTime(_now.AddDays(2)), "Title",
-            "Description", 50, new DateAndTime(_now));
-        await _dbContext.ToDoTasks.AddAsync(toDoTask);
-        await _dbContext.SaveChangesAsync();
-
-        var command = new UpdateToDoTask(toDoTaskId, updatedExpirationDate, "Title",
+        var toDoTask = await AddToDoTaskAsync(toDoTaskId, _now.AddDays(2), "Title",
             "Description", 50);
+
+        var command = new UpdateToDoTask(toDoTaskId, updatedExpirationDate, toDoTask.Title,
+            toDoTask.Description, toDoTask.PercentComplete);
 
         // Act
         var response = await _client.PutAsJsonAsync($"{ToDoTasksEndpoint}/{toDoTaskId}", command);
@@ -231,7 +198,6 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();
-
         var command = new UpdateToDoTask(toDoTaskId, _now.AddDays(2), "Title",
             "Description", 50);
 
@@ -249,11 +215,8 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
         // Arrange
         var toDoTaskId = Guid.NewGuid();
         var updatedPercentComplete = 70;
-        var toDoTask = ToDoTask.Create(toDoTaskId, new DateAndTime(_now.AddDays(2)), "Title",
-            "Description", 50, new DateAndTime(_now));
-        await _dbContext.ToDoTasks.AddAsync(toDoTask);
-        await _dbContext.SaveChangesAsync();
-
+        await AddToDoTaskAsync(toDoTaskId, _now.AddDays(2), "Title",
+            "Description", 50);
         var command = new SetToDoTaskPercentComplete(toDoTaskId, updatedPercentComplete);
 
         // Act
@@ -266,7 +229,6 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
         var result = await _dbContext.ToDoTasks
             .AsNoTracking()
             .SingleOrDefaultAsync(t => t.Id == new ToDoTaskId(toDoTaskId));
-
         result.PercentComplete.Value.ShouldBe(updatedPercentComplete);
     }
 
@@ -276,10 +238,8 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
         // Arrange
         var toDoTaskId = Guid.NewGuid();
         var updatedPercentComplete = -20;
-        var toDoTask = ToDoTask.Create(toDoTaskId, new DateAndTime(_now.AddDays(2)), "Title",
-            "Description", 50, new DateAndTime(_now));
-        await _dbContext.ToDoTasks.AddAsync(toDoTask);
-        await _dbContext.SaveChangesAsync();
+        await AddToDoTaskAsync(toDoTaskId, _now.AddDays(2), "Title",
+            "Description", 50);
 
         var command = new SetToDoTaskPercentComplete(toDoTaskId, updatedPercentComplete);
 
@@ -296,9 +256,7 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();
-        var updatedPercentComplete = 20;
-
-        var command = new SetToDoTaskPercentComplete(toDoTaskId, updatedPercentComplete);
+        var command = new SetToDoTaskPercentComplete(toDoTaskId, 20);
 
         // Act
         var response = await _client.PatchAsJsonAsync($"{ToDoTasksEndpoint}/{toDoTaskId}/percent-complete", command);
@@ -313,11 +271,8 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();
-        var title = "Title";
-        var toDoTask = ToDoTask.Create(toDoTaskId, new DateAndTime(_now.AddDays(2)), title,
-            "Description", 50, new DateAndTime(_now));
-        await _dbContext.ToDoTasks.AddAsync(toDoTask);
-        await _dbContext.SaveChangesAsync();
+        await AddToDoTaskAsync(toDoTaskId, _now.AddDays(2), "Title",
+            "Description", 50);
 
         // Act
         var response = await _client.DeleteAsync($"{ToDoTasksEndpoint}/{toDoTaskId}");
@@ -346,11 +301,8 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
     {
         // Arrange
         var toDoTaskId = Guid.NewGuid();
-        var title = "Title";
-        var toDoTask = ToDoTask.Create(toDoTaskId, new DateAndTime(_now.AddDays(2)), title,
-            "Description", 50, new DateAndTime(_now));
-        await _dbContext.ToDoTasks.AddAsync(toDoTask);
-        await _dbContext.SaveChangesAsync();
+        await AddToDoTaskAsync(toDoTaskId,_now.AddDays(2), "Title",
+            "Description", 50);
 
         // Act
         var request = new HttpRequestMessage(HttpMethod.Patch, $"{ToDoTasksEndpoint}/{toDoTaskId}/done");
@@ -387,11 +339,8 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
     public ToDoTasksControllerTests(CustomWebApplicationFactory<Program> factory)
     {
         _client = factory.CreateClient();
-
-        var scopeFactory = factory.Services.GetRequiredService<IServiceScopeFactory>();
-        _scope = scopeFactory.CreateScope();
+        _scope = factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
         _dbContext = _scope.ServiceProvider.GetRequiredService<ToDoDbContext>();
-
         _dbContext.Database.EnsureCreated();
     }
 
@@ -402,5 +351,20 @@ public class ToDoTasksControllerTests : IClassFixture<CustomWebApplicationFactor
         _scope?.Dispose();
     }
 
+    #endregion
+    
+    #region HELPERS
+    
+    private async Task<ToDoTask> AddToDoTaskAsync(Guid toDoTaskId, DateTime expirationDate, string title,
+        string description, int percentComplete)
+    {
+        var task = ToDoTask.Create(toDoTaskId, new DateAndTime(expirationDate), title, description,
+            percentComplete, new DateAndTime(_now));
+
+        await _dbContext.ToDoTasks.AddAsync(task);
+        await _dbContext.SaveChangesAsync();
+        return task;
+    }
+    
     #endregion
 }
