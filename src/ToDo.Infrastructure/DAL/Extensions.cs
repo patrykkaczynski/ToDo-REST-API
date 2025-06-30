@@ -18,7 +18,7 @@ internal static class Extensions
 {
     public static IServiceCollection AddPostgres(this IServiceCollection services, IConfiguration configuration)
     {
-        var section = configuration.GetSection(PostgresOptions.Postgres);
+        var section = configuration.GetSection(PostgresOptions.ConfigSection);
         services.Configure<PostgresOptions>(section);
         var postgresOptions = section.Get<PostgresOptions>();
         

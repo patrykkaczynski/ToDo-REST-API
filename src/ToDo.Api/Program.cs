@@ -11,7 +11,7 @@ builder.Services
     .AddCore()
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
-    .AddPresentation()
+    .AddPresentation(builder.Configuration)
     .AddControllers();
 
 builder.UseSerilog();
@@ -22,7 +22,7 @@ app.UseInfrastructure();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwaggerDocumentation();
+    app.UseSwaggerDocumentation(app.Configuration);
 }
 
 app.MapControllers();

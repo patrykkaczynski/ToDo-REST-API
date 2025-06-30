@@ -27,7 +27,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
                 .BuildServiceProvider()
                 .GetRequiredService<IConfiguration>();
             
-            var section = configuration.GetSection(PostgresOptions.Postgres);
+            var section = configuration.GetSection(PostgresOptions.ConfigSection);
             var postgresOptions = section.Get<PostgresOptions>();
 
             services.AddDbContext<ToDoDbContext>(options =>

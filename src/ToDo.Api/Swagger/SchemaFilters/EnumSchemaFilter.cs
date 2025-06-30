@@ -4,7 +4,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace ToDo.Api.Swagger.SchemaFilters;
 
-public class EnumSchemaFilter : ISchemaFilter
+internal class EnumSchemaFilter : ISchemaFilter
 {
     public void Apply(OpenApiSchema schema, SchemaFilterContext context)
     {
@@ -14,6 +14,6 @@ public class EnumSchemaFilter : ISchemaFilter
         schema.Enum.Clear();
         Enum.GetNames(context.Type)
             .ToList()
-            .ForEach(name => schema.Enum.Add(new OpenApiString($"{name}")));
+            .ForEach(name => schema.Enum.Add(new OpenApiString(name)));
     }
 }

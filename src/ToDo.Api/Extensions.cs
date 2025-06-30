@@ -5,9 +5,9 @@ namespace ToDo.Api;
 
 public static class Extensions
 {
-    public static IServiceCollection AddPresentation(this IServiceCollection services)
+    public static IServiceCollection AddPresentation(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSwaggerDocumentation();
+        services.AddSwaggerDocumentation(configuration);
         
         services.AddControllers().AddJsonOptions(options =>
         {
